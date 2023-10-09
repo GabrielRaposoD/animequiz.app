@@ -1,9 +1,8 @@
-import { Config, Prisma } from '@prisma/client';
-
+import { Config } from '@prisma/client';
 import { NextResponse } from 'next/server';
 import Prando from 'prando';
 import { differenceInDays } from 'date-fns';
-import { prisma } from '@/utils';
+import { prisma } from '@/lib';
 
 export async function GET() {
   const config = (await prisma.config.findFirst({})) as Config;

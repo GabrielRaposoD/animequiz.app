@@ -1,10 +1,9 @@
 import { Config } from '@prisma/client';
-import { NextResponse } from 'next/server';
 import Prando from 'prando';
 import { differenceInDays } from 'date-fns';
 import { prisma } from '@/lib';
 
-export async function GET() {
+const getCurrentCharacter = async () => {
   const config = (await prisma.config.findFirst({})) as Config;
 
   const currentDay = differenceInDays(new Date(config.createdAt), new Date());
@@ -33,5 +32,7 @@ export async function GET() {
     },
   });
 
-  return NextResponse.json({ character });
-}
+  return character;
+};
+
+export default getCurrentCharacter;

@@ -77,6 +77,6 @@ model Character {
   id      Int    @id @default(autoincrement())
   name    String @unique
   image   String
-  Anime   Anime  @relation(fields: [animeId], references: [id])
+  anime   Anime  @relation(fields: [animeId], references: [id])
   animeId Int
 }

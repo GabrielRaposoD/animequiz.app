@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server';
 import { differenceInDays } from 'date-fns';
 import { nanoid } from 'nanoid';
-import { prisma } from '@/utils';
+import { prisma } from '@/lib';
 
-export async function GET() {
+export async function POST() {
   var seed = nanoid(64);
 
   const config = await prisma.config.findFirst({});
@@ -28,28 +28,28 @@ export async function GET() {
     },
   });
 
-  if (!seeds[currentDay]) {
-    await prisma.seed.create({
-      data: {
-        seed,
-        day: currentDay,
-        config: {
-          connect: {
-            id: config.id,
-          },
-        },
-      },
-    });
-
-    return NextResponse.json('Seed created!', {
-      status: 201,
-    });
+  if (seeds[currentDay]) {
+    return NextResponse.json(
+      { error: 'Seed already exists!' },
+      {
+        status: 200,
+      }
+    );
   }
 
-  return NextResponse.json(
-    { error: 'Seed already exists!' },
-    {
-      status: 400,
-    }
-  );
+  await prisma.seed.create({
+    data: {
+      seed,
+      day: currentDay,
+      config: {
+        connect: {
+          id: config.id,
+        },
+      },
+    },
+  });
+
+  return NextResponse.json('Seed created!', {
+    status: 201,
+  });
 }
