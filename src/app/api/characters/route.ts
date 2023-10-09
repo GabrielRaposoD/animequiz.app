@@ -18,6 +18,9 @@ export async function GET(request: NextRequest) {
       name: 'asc',
     },
     take: 100,
+    include: {
+      Anime: true,
+    },
   });
 
   return NextResponse.json(characters);

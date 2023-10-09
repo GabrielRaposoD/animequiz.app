@@ -16,26 +16,25 @@ import {
 import { useCallback, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
-import { CommandList } from 'cmdk';
 import { cn } from '@/lib/utils';
 import { debounce } from 'radash';
 
 type ComboboxProps = {
   items: { label: string; value: string }[];
   placeholder?: string;
-  value: string;
+  value?: string;
   onChange: (value: string, type: 'select' | 'input') => void;
+  disabled?: boolean;
 };
 
 export function Combobox({
   items,
   placeholder = 'Search items...',
-  value,
+  value = '',
   onChange,
+  disabled = false,
 }: ComboboxProps) {
   const [open, setOpen] = useState(false);
-
-  console.log(items);
 
   const debouncedOnChange = debounce({ delay: 500 }, (value: string) => {
     onChange(value, 'input');
@@ -56,6 +55,7 @@ export function Combobox({
           role='combobox'
           aria-expanded={open}
           className='w-[400px] justify-between capitalize'
+          disabled={disabled}
         >
           {value ? value : placeholder}
           <ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />

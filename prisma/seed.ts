@@ -13,7 +13,6 @@ const ratings: { [key: string]: Rating } = {
 };
 
 const parseAnimeData = (data: any): Prisma.AnimeCreateInput => {
-  console.log(data.studio);
   const rating = ratings[data.rating as keyof typeof ratings];
   const genres = data.genres.map((genre: any) => genre.name);
   const themes = data.themes.map((theme: any) => theme.name);
