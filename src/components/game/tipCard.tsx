@@ -12,9 +12,12 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        correct: 'bg-green-600 shadow-lg shadow-green-500/50',
-        incorrect: 'bg-rose-600 shadow-lg shadow-rose-500/50',
-        partial: 'bg-amber-600 shadow-lg shadow-amber-500/50',
+        correct:
+          'bg-green-600 shadow-lg shadow-green-500/50 border-2 border-green-500',
+        incorrect:
+          'bg-rose-600 shadow-lg shadow-rose-500/50 border-2 border-rose-500',
+        partial:
+          'bg-amber-600 shadow-lg shadow-amber-500/50 border-2 border-amber-500',
       },
     },
   }

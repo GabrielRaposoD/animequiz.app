@@ -1,6 +1,6 @@
 'use client';
 
-import { Check, ChevronsUpDown } from 'lucide-react';
+import { ChevronsUpDown, X } from 'lucide-react';
 import {
   Command,
   CommandEmpty,
@@ -25,6 +25,7 @@ type ComboboxProps = {
   value?: string;
   onChange: (value: string, type: 'select' | 'input') => void;
   disabled?: boolean;
+  disabledItems?: string[];
 };
 
 export function Combobox({
@@ -33,6 +34,7 @@ export function Combobox({
   value = '',
   onChange,
   disabled = false,
+  disabledItems = [],
 }: ComboboxProps) {
   const [open, setOpen] = useState(false);
 
@@ -81,11 +83,14 @@ export function Combobox({
                     onChange(currentValue, 'select');
                     setOpen(false);
                   }}
+                  disabled={disabledItems.includes(item.value)}
                 >
-                  <Check
+                  <X
                     className={cn(
-                      'mr-2 h-4 w-4',
-                      value === item.value ? 'opacity-100' : 'opacity-0'
+                      'mr-2 h-4 w-4 text-rose-600',
+                      disabledItems.includes(item.value)
+                        ? 'opacity-100'
+                        : 'opacity-0'
                     )}
                   />
                   {item.label}

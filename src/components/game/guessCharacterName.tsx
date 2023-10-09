@@ -6,10 +6,33 @@ import { CharacterWithAnime } from '@/types';
 import { Combobox } from '../ui/combobox';
 import ImageCanvas from './imageCanvas';
 import TipCard from './tipCard';
+import { characterQuizTips } from '@/constants/characterQuiz';
+import { get } from 'radash';
+import { motion } from 'framer-motion';
 import tipParser from '@/lib/tipParser';
 
 type GameProps = {
   character: CharacterWithAnime;
+};
+
+const container = {
+  hidden: { opacity: 1, scale: 0 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: {
+      delayChildren: 0.3,
+      staggerChildren: 0.2,
+    },
+  },
+};
+
+const item = {
+  hidden: { y: 20, opacity: 0 },
+  visible: {
+    y: 0,
+    opacity: 1,
+  },
 };
 
 const GuessCharacterName = ({ character }: GameProps) => {
@@ -46,7 +69,10 @@ const GuessCharacterName = ({ character }: GameProps) => {
         character.name.toLocaleLowerCase() === value.toLocaleLowerCase()
     ) as CharacterWithAnime;
 
-    setSelectedCharacters((prev) => [selectedCharacter, ...prev]);
+    setSelectedCharacters((prev) => {
+      console.log(prev);
+      return [selectedCharacter, ...prev];
+    });
 
     const isCorrect = character.name === selectedCharacter.name;
 
@@ -72,76 +98,43 @@ const GuessCharacterName = ({ character }: GameProps) => {
         items={charactersItems}
         onChange={onCharacterValueChange}
         placeholder='Who is this character?'
+        disabled={correct}
+        disabledItems={selectedCharacters.map((c) => c.name)}
       />
-      <ol className='flex flex-col gap-y-4'>
+      <motion.ol className='flex flex-col gap-y-4'>
         {selectedCharacters.map((c) => {
           return (
-            <li
-              key={c.id}
-              className='flex flex-row text-xs gap-x-2.5 capitalize'
-            >
-              <TipCard
-                content={c.name}
-                text='Character'
-                variant={tipParser(c.name, character.name)}
-              />
-              <TipCard
-                content={c.Anime.title}
-                text='Anime'
-                variant={tipParser(c.Anime.title, character.Anime.title)}
-              />
-              <TipCard
-                content={c.Anime.year}
-                text='Year'
-                variant={tipParser(c.Anime.year, character.Anime.year)}
-              />
-              <TipCard
-                content={c.Anime.season ?? ''}
-                text='Season'
-                variant={tipParser(
-                  c.Anime.season ?? '',
-                  character.Anime.season ?? ''
-                )}
-              />
-              <TipCard
-                content={c.Anime.type}
-                text='Type'
-                variant={tipParser(c.Anime.type, character.Anime.type)}
-              />
-              <TipCard
-                content={c.Anime.rating}
-                text='Rating'
-                variant={tipParser(c.Anime.rating, character.Anime.rating)}
-              />
-              <TipCard
-                content={c.Anime.studio}
-                text='Studio'
-                variant={tipParser(c.Anime.studio, character.Anime.studio)}
-              />
-              <TipCard
-                content={c.Anime.source}
-                text='Source'
-                variant={tipParser(c.Anime.source, character.Anime.source)}
-              />
-              <TipCard
-                content={c.Anime.genres.join(', ')}
-                text='Genres'
-                variant={tipParser(c.Anime.genres, character.Anime.genres)}
-              />
-              <TipCard
-                content={c.Anime.themes.join(', ')}
-                text='Themes'
-                variant={tipParser(c.Anime.themes, character.Anime.themes)}
-              />
-              <TipCard
-                content={c.Anime.episodes}
-                text='Episodes'
-                variant={tipParser(c.Anime.episodes, character.Anime.episodes)}
-              />
+            <li key={c.id}>
+              <motion.ul
+                className='flex flex-row text-xs gap-x-2.5 capitalize'
+                variants={container}
+                initial='hidden'
+                animate='visible'
+              >
+                {characterQuizTips.map((tip) => {
+                  let content: string | number | string[] = get(c, tip.key);
+                  const characterData: string | number | string[] = get(
+                    character,
+                    tip.key
+                  );
+
+                  return (
+                    <motion.li variants={item} key={c.id + tip.label} animate>
+                      <TipCard
+                        content={
+                          Array.isArray(content) ? content.join(', ') : content
+                        }
+                        text={tip.label}
+                        variant={tipParser(content, characterData)}
+                      />
+                    </motion.li>
+                  );
+                })}
+              </motion.ul>
             </li>
           );
         })}
-      </ol>
+      </motion.ol>
     </div>
   );
 };
