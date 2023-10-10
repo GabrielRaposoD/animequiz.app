@@ -6,7 +6,7 @@ export default async function CharacterAnimeQuiz() {
   const character = (await getCurrentCharacterAnime()) as CharacterWithAnime;
 
   return (
-    <main className='flex min-h-screen flex-col items-center justify-between p-24'>
+    <main className='flex min-h-screen flex-col items-center justify-between'>
       <GuessCharacterAnimeTitle character={character} />
     </main>
   );

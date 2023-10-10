@@ -10,6 +10,7 @@ import { characterQuizTips } from '@/constants/tips';
 import { get } from 'radash';
 import { motion } from 'framer-motion';
 import tipParser from '@/lib/tipParser';
+import useGame from '@/hooks/useGame';
 
 type GameProps = {
   character: CharacterWithAnime;
@@ -36,72 +37,21 @@ const item = {
 };
 
 const GuessCharacterName = ({ character }: GameProps) => {
-  const [correct, setCorrect] = useState<boolean>(false);
-  const [tries, setTries] = useState<number>(0);
-  const [selectedCharacters, setSelectedCharacters] = useState<
-    CharacterWithAnime[]
-  >([]);
-  const [characters, setCharacters] = useState<CharacterWithAnime[]>([]);
-
-  const charactersItems = useMemo(
-    () =>
-      characters.map((character) => ({
-        label: character.name,
-        value: character.name,
-      })),
-    [characters]
-  );
-
-  useEffect(() => {
-    getCharacters();
-  }, []);
-
-  const getCharacters = async (query = '') => {
-    const response = await fetch(`/api/characters?name=${query}`);
-    const data = await response.json();
-
-    setCharacters(data);
-  };
-
-  const onCharacterSelect = (value: string) => {
-    const selectedCharacter = characters.find(
-      (character) =>
-        character.name.toLocaleLowerCase() === value.toLocaleLowerCase()
-    ) as CharacterWithAnime;
-
-    setSelectedCharacters((prev) => {
-      return [selectedCharacter, ...prev];
-    });
-
-    const isCorrect = character.name === selectedCharacter.name;
-
-    setCorrect(isCorrect);
-
-    if (!isCorrect) {
-      setTries((prev) => prev + 1);
-    }
-  };
-
-  const onCharacterValueChange = (value: string, type: 'select' | 'input') => {
-    if (type === 'select') {
-      onCharacterSelect(value);
-    } else {
-      getCharacters(value);
-    }
-  };
+  const { parsedItems, onItemValueChange, correct, selectedItems, tries } =
+    useGame<CharacterWithAnime>(character, 'characters', 'name');
 
   return (
     <div className='flex flex-col items-center gap-y-4 mt-20'>
       <ImageCanvas src={character!.image} correct={correct} tries={tries} />
       <Combobox
-        items={charactersItems}
-        onChange={onCharacterValueChange}
+        items={parsedItems}
+        onChange={onItemValueChange}
         placeholder='Who is this character?'
         disabled={correct}
-        disabledItems={selectedCharacters.map((c) => c.name)}
+        disabledItems={selectedItems.map((c) => c.name)}
       />
       <motion.ol className='flex flex-col gap-y-4'>
-        {selectedCharacters.map((c) => {
+        {selectedItems.map((c) => {
           return (
             <li key={c.id}>
               <motion.ul

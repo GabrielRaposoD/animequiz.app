@@ -56,14 +56,14 @@ export function Combobox({
           variant='outline'
           role='combobox'
           aria-expanded={open}
-          className='w-[400px] justify-between capitalize'
+          className='md:w-[400px] w-full justify-between capitalize'
           disabled={disabled}
         >
           {value ? value : placeholder}
           <ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className='w-[400px] p-0'>
+      <PopoverContent className='md:w-[400px] w-full p-0'>
         <Command shouldFilter={false}>
           <CommandInput
             placeholder={placeholder}

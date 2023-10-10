@@ -14,17 +14,17 @@ const getCurrentAnime = async () => {
     },
   });
 
-  const animeCount = await prisma.anime.count();
-
   const rng = new Prando(currentSeed!.seed);
 
-  const anime = await prisma.anime.findUnique({
-    where: {
-      id: rng.nextInt(1, animeCount),
+  const anime = await prisma.anime.findMany({
+    skip: rng.nextInt(1, currentSeed!.animeCount) - 1,
+    take: 1,
+    orderBy: {
+      id: 'asc',
     },
   });
 
-  return anime;
+  return anime[0];
 };
 
 export default getCurrentAnime;

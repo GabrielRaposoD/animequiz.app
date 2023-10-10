@@ -1,3 +1,5 @@
+import * as fs from 'fs';
+
 import { Prisma, PrismaClient, Rating } from '@prisma/client';
 import { parallel, sleep, try as tryit } from 'radash';
 
@@ -12,8 +14,38 @@ const ratings: { [key: string]: Rating } = {
   'Rx - Hentai': 'RX',
 };
 
+const FETCH_AMOUNT = 50;
+
+const findPrequel = async (data: any) => {
+  if (!data.hasPrequel) {
+    return { anime: data.anime, hasPrequel: false };
+  }
+
+  const res = await fetch(
+    process.env.ANIME_API_URL + `anime/${data.anime.mal_id}/relations`
+  ).then((res) => res.json());
+
+  await sleep(1000);
+
+  const prequel = res.data.find((item: any) => {
+    return item.relation === 'Prequel';
+  });
+
+  if (!prequel) {
+    return { anime: data.anime, hasPrequel: false };
+  }
+
+  const newAnime = await fetch(
+    process.env.ANIME_API_URL + `anime/${prequel.entry[0].mal_id}/full`
+  ).then((res) => res.json());
+
+  await sleep(1000);
+
+  return { anime: newAnime.data, hasPrequel: true };
+};
+
 const parseAnimeData = (data: any): Prisma.AnimeCreateInput => {
-  const rating = ratings[data.rating as keyof typeof ratings];
+  const rating = ratings[data?.rating as keyof typeof ratings] ?? 'G';
   const genres = data.genres.map((genre: any) => genre.name);
   const themes = data.themes.map((theme: any) => theme.name);
 
@@ -22,16 +54,17 @@ const parseAnimeData = (data: any): Prisma.AnimeCreateInput => {
     banner: data.images.jpg.image_url,
     synopsis: data.synopsis ?? '',
     title: data.titles[0].title,
-    season: data.season,
-    studio: data.studios[0]?.name ?? 'Unknown',
+    season: data.season ? data.season : 'Unknown',
+    studio:
+      data.studios[0]?.name.length > 0 ? data.studios[0]?.name : 'Unknown',
     source: data.source,
     episodes: data.episodes ?? 1,
     type: data.type,
     myAnimeListId: data.mal_id,
     year,
-    genres,
-    themes,
-    rating: rating ?? 'G',
+    genres: genres.length > 0 ? genres : ['Unknown'],
+    themes: themes.length > 0 ? themes : ['Unknown'],
+    rating: rating,
   };
 };
 
@@ -45,7 +78,7 @@ async function main() {
   }
 
   let page = config.animePage || 1;
-  const _ = [...Array(50).keys()];
+  const _ = [...Array(FETCH_AMOUNT).keys()];
 
   const [animesErr, animes] = await tryit(parallel)(1, _, async (i) => {
     const data = await fetch(
@@ -62,13 +95,31 @@ async function main() {
     return;
   }
 
-  const animesData = animes!.flatMap((res) => {
-    return res.data;
+  let animesData = animes!.flatMap((res) => {
+    return res.data.map((anime: any) => {
+      return { anime, hasPrequel: true };
+    });
   });
 
+  animesData = animesData.filter((a) => {
+    return (a.anime.type as string).toLowerCase() === 'tv';
+  });
+
+  let hasPrequel = true;
+
+  while (hasPrequel) {
+    animesData = await parallel(1, animesData, findPrequel);
+
+    if (!animesData.some((anime) => anime.hasPrequel)) {
+      hasPrequel = false;
+    }
+  }
+
+  animesData = animesData.filter((a) => a.anime.type === 'TV');
+
   await prisma.anime.createMany({
-    data: animesData.map((anime) => {
-      const parsedAnime = parseAnimeData(anime);
+    data: animesData.map((a) => {
+      const parsedAnime = parseAnimeData(a.anime);
 
       return parsedAnime;
     }),
@@ -77,7 +128,7 @@ async function main() {
 
   await prisma.config.update({
     where: { id: config?.id },
-    data: { animePage: page + 50 },
+    data: { animePage: page + FETCH_AMOUNT },
   });
 
   const dbAnimes = await prisma.anime.findMany({});
@@ -97,6 +148,7 @@ async function main() {
       data: charactersData.map((data) => ({
         animeId: anime.id,
         image: data.character.images.jpg.image_url,
+        slug: data.character.name + ' - ' + anime.title,
         name: data.character.name.split(',').reverse().join(' ').trim(),
       })),
       skipDuplicates: true,

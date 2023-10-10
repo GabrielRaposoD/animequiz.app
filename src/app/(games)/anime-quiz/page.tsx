@@ -6,7 +6,7 @@ export default async function AnimeQuiz() {
   const anime = (await getCurrentAnime()) as Anime;
 
   return (
-    <main className='flex min-h-screen flex-col items-center justify-between p-24'>
+    <main className='flex min-h-screen flex-col items-center justify-between'>
       <GuessAnimeTitle anime={anime} />
     </main>
   );

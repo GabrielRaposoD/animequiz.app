@@ -37,10 +37,15 @@ export async function POST() {
     );
   }
 
+  const characterCount = await prisma.character.count();
+  const animeCount = await prisma.anime.count();
+
   await prisma.seed.create({
     data: {
       seed,
       day: currentDay,
+      animeCount: animeCount,
+      characterCount: characterCount,
       config: {
         connect: {
           id: config.id,

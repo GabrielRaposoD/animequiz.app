@@ -19,7 +19,7 @@ export async function GET(request: NextRequest) {
     },
     take: 100,
     include: {
-      Anime: true,
+      anime: true,
     },
   });
 

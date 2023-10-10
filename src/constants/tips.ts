@@ -1,43 +1,43 @@
 const characterQuizTips = [
   {
     label: 'Anime',
-    key: 'Anime.title',
+    key: 'anime.title',
   },
   {
     label: 'Year',
-    key: 'Anime.year',
+    key: 'anime.year',
   },
   {
     label: 'Season',
-    key: 'Anime.season',
+    key: 'anime.season',
   },
   {
     label: 'Type',
-    key: 'Anime.type',
+    key: 'anime.type',
   },
   {
     label: 'Rating',
-    key: 'Anime.rating',
+    key: 'anime.rating',
   },
   {
     label: 'Studio',
-    key: 'Anime.studio',
+    key: 'anime.studio',
   },
   {
     label: 'Source',
-    key: 'Anime.source',
+    key: 'anime.source',
   },
   {
     label: 'Genres',
-    key: 'Anime.genres',
+    key: 'anime.genres',
   },
   {
     label: 'Themes',
-    key: 'Anime.themes',
+    key: 'anime.themes',
   },
   {
     label: 'Episodes',
-    key: 'Anime.episodes',
+    key: 'anime.episodes',
   },
 ];
 
