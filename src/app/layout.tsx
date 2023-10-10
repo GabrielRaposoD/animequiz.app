@@ -1,5 +1,6 @@
 import './globals.css';
 
+import Image from 'next/image';
 import { Inter } from 'next/font/google';
 import type { Metadata } from 'next';
 import { ThemeProvider } from '@/components/theme-provider';
@@ -17,15 +18,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang='en'>
+    <html lang='en' className='relative overflow-hidden'>
       <body className={inter.className}>
-        <ThemeProvider
-          attribute='class'
-          defaultTheme='dark'
-          enableSystem
-          disableTransitionOnChange
-        >
-          {children}
+        <Image
+          src='logo.svg'
+          alt='Anime Quiz Logo'
+          width={0}
+          height={0}
+          sizes='100vw'
+          className='absolute top-[-90px] w-[450px] md:w-[470px] md:top-[-110px] lg:w-[500px] lg:top-[-122px] xl:w-[600px] xl:top-[-165px] mx-auto left-0 right-0 pointer-events-none'
+        />
+        <ThemeProvider attribute='class' defaultTheme='dark' enableSystem>
+          <main className='flex min-h-screen flex-col items-center justify-between'>
+            {children}
+          </main>
         </ThemeProvider>
       </body>
     </html>

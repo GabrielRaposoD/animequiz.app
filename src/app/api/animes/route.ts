@@ -14,6 +14,10 @@ export async function GET(request: NextRequest) {
         mode: 'insensitive',
       },
     },
+    orderBy: {
+      title: 'asc',
+    },
+    take: 100,
   });
 
   return NextResponse.json(animes);

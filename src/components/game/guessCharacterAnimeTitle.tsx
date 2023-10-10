@@ -2,11 +2,12 @@
 
 import { useEffect, useMemo, useState } from 'react';
 
+import { Anime } from '@prisma/client';
 import { CharacterWithAnime } from '@/types';
 import { Combobox } from '../ui/combobox';
 import ImageCanvas from './imageCanvas';
 import TipCard from './tipCard';
-import { characterQuizTips } from '@/constants/tips';
+import { characterAnimeQuizTips } from '@/constants/tips';
 import { get } from 'radash';
 import { motion } from 'framer-motion';
 import tipParser from '@/lib/tipParser';
@@ -35,45 +36,42 @@ const item = {
   },
 };
 
-const GuessCharacterName = ({ character }: GameProps) => {
+const GuessCharacterAnimeTitle = ({ character }: GameProps) => {
   const [correct, setCorrect] = useState<boolean>(false);
   const [tries, setTries] = useState<number>(0);
-  const [selectedCharacters, setSelectedCharacters] = useState<
-    CharacterWithAnime[]
-  >([]);
-  const [characters, setCharacters] = useState<CharacterWithAnime[]>([]);
+  const [selectedAnimes, setSelectedAnimes] = useState<Anime[]>([]);
+  const [animes, setAnimes] = useState<Anime[]>([]);
 
-  const charactersItems = useMemo(
+  const animesItems = useMemo(
     () =>
-      characters.map((character) => ({
-        label: character.name,
-        value: character.name,
+      animes.map((anime) => ({
+        label: anime.title,
+        value: anime.title,
       })),
-    [characters]
+    [animes]
   );
 
   useEffect(() => {
-    getCharacters();
+    getAnimes();
   }, []);
 
-  const getCharacters = async (query = '') => {
-    const response = await fetch(`/api/characters?name=${query}`);
+  const getAnimes = async (query = '') => {
+    const response = await fetch(`/api/animes?title=${query}`);
     const data = await response.json();
 
-    setCharacters(data);
+    setAnimes(data);
   };
 
-  const onCharacterSelect = (value: string) => {
-    const selectedCharacter = characters.find(
-      (character) =>
-        character.name.toLocaleLowerCase() === value.toLocaleLowerCase()
-    ) as CharacterWithAnime;
+  const onAnimeSelect = (value: string) => {
+    const selectedAnime = animes.find(
+      (anime) => anime.title.toLocaleLowerCase() === value.toLocaleLowerCase()
+    ) as Anime;
 
-    setSelectedCharacters((prev) => {
-      return [selectedCharacter, ...prev];
+    setSelectedAnimes((prev) => {
+      return [selectedAnime, ...prev];
     });
 
-    const isCorrect = character.name === selectedCharacter.name;
+    const isCorrect = character.Anime.title === selectedAnime.title;
 
     setCorrect(isCorrect);
 
@@ -82,11 +80,11 @@ const GuessCharacterName = ({ character }: GameProps) => {
     }
   };
 
-  const onCharacterValueChange = (value: string, type: 'select' | 'input') => {
+  const onAnimeValueChange = (value: string, type: 'select' | 'input') => {
     if (type === 'select') {
-      onCharacterSelect(value);
+      onAnimeSelect(value);
     } else {
-      getCharacters(value);
+      getAnimes(value);
     }
   };
 
@@ -94,14 +92,14 @@ const GuessCharacterName = ({ character }: GameProps) => {
     <div className='flex flex-col items-center gap-y-4 mt-20'>
       <ImageCanvas src={character!.image} correct={correct} tries={tries} />
       <Combobox
-        items={charactersItems}
-        onChange={onCharacterValueChange}
-        placeholder='Who is this character?'
+        items={animesItems}
+        onChange={onAnimeValueChange}
+        placeholder='Which anime is this character from?'
         disabled={correct}
-        disabledItems={selectedCharacters.map((c) => c.name)}
+        disabledItems={selectedAnimes.map((c) => c.title)}
       />
       <motion.ol className='flex flex-col gap-y-4'>
-        {selectedCharacters.map((c) => {
+        {selectedAnimes.map((c) => {
           return (
             <li key={c.id}>
               <motion.ul
@@ -110,10 +108,10 @@ const GuessCharacterName = ({ character }: GameProps) => {
                 initial='hidden'
                 animate='visible'
               >
-                {characterQuizTips.map((tip) => {
+                {characterAnimeQuizTips.map((tip) => {
                   let content: string | number | string[] = get(c, tip.key);
-                  const characterData: string | number | string[] = get(
-                    character,
+                  const animeData: string | number | string[] = get(
+                    character.Anime,
                     tip.key
                   );
 
@@ -124,7 +122,7 @@ const GuessCharacterName = ({ character }: GameProps) => {
                           Array.isArray(content) ? content.join(', ') : content
                         }
                         text={tip.label}
-                        variant={tipParser(content, characterData)}
+                        variant={tipParser(content, animeData)}
                       />
                     </motion.li>
                   );
@@ -138,4 +136,4 @@ const GuessCharacterName = ({ character }: GameProps) => {
   );
 };
 
-export default GuessCharacterName;
+export default GuessCharacterAnimeTitle;

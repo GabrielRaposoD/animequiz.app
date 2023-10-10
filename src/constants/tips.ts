@@ -1,9 +1,5 @@
 const characterQuizTips = [
   {
-    label: 'Character',
-    key: 'name',
-  },
-  {
     label: 'Anime',
     key: 'Anime.title',
   },
@@ -45,4 +41,43 @@ const characterQuizTips = [
   },
 ];
 
-export { characterQuizTips };
+const characterAnimeQuizTips = [
+  {
+    label: 'Year',
+    key: 'year',
+  },
+  {
+    label: 'Season',
+    key: 'season',
+  },
+  {
+    label: 'Type',
+    key: 'type',
+  },
+  {
+    label: 'Rating',
+    key: 'rating',
+  },
+  {
+    label: 'Studio',
+    key: 'studio',
+  },
+  {
+    label: 'Source',
+    key: 'source',
+  },
+  {
+    label: 'Genres',
+    key: 'genres',
+  },
+  {
+    label: 'Themes',
+    key: 'themes',
+  },
+  {
+    label: 'Episodes',
+    key: 'episodes',
+  },
+];
+
+export { characterQuizTips, characterAnimeQuizTips };
