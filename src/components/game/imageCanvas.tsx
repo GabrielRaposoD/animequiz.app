@@ -30,6 +30,8 @@ const ImageCanvas = ({
         canvasContext.current = canvasRef.current.getContext('2d');
       }
 
+      setLoaded(false);
+
       canvasRef.current.width = canvasWidth;
       canvasRef.current.height = canvasHeight;
       canvasRef.current.style.width = `${canvasWidth}px`;

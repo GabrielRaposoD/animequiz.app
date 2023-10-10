@@ -36,7 +36,7 @@ const nav = [
 export default async function Home() {
   return (
     <section className='flex flex-col items-center flex-1'>
-      <Card className='mt-16'>
+      <Card className='mt-16 bg-gradient-to-tr from-card via-zinc-600/20 to-card'>
         <CardHeader className='text-center'>
           <CardTitle>Welcome!</CardTitle>
           <CardDescription>Put your anime knowledge to work</CardDescription>

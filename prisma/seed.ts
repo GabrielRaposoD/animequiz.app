@@ -82,7 +82,10 @@ async function main() {
 
   const [animesErr, animes] = await tryit(parallel)(1, _, async (i) => {
     const data = await fetch(
-      process.env.ANIME_API_URL + `top/anime?page=${page + i}`
+      process.env.ANIME_API_URL +
+        `anime?sfw=true&unapproved=false&type=tv&order_by=popularity&page=${
+          page + i
+        }`
     );
 
     await sleep(1000);
@@ -99,10 +102,6 @@ async function main() {
     return res.data.map((anime: any) => {
       return { anime, hasPrequel: true };
     });
-  });
-
-  animesData = animesData.filter((a) => {
-    return (a.anime.type as string).toLowerCase() === 'tv';
   });
 
   let hasPrequel = true;
@@ -148,7 +147,10 @@ async function main() {
       data: charactersData.map((data) => ({
         animeId: anime.id,
         image: data.character.images.jpg.image_url,
-        slug: data.character.name + ' - ' + anime.title,
+        slug:
+          data.character.name.split(',').reverse().join(' ').trim() +
+          ' - ' +
+          anime.title,
         name: data.character.name.split(',').reverse().join(' ').trim(),
       })),
       skipDuplicates: true,

@@ -1,13 +1,21 @@
 import { CharacterWithAnime } from '@/types';
-import GuessCharacterName from '@/components/game/guessCharacterName';
-import { getCurrentCharacter } from '@/services';
+import Guess from '@/components/game/guess';
+import { characterQuizTips } from '@/constants/tips';
+import { getTodaysData } from '@/services';
 
 export default async function CharacterQuiz() {
-  const character = (await getCurrentCharacter()) as CharacterWithAnime;
+  const character = (await getTodaysData('character')) as CharacterWithAnime;
 
   return (
-    <main className='flex min-h-screen flex-col items-center justify-between'>
-      <GuessCharacterName character={character} />
-    </main>
+    <section className='flex flex-col items-center'>
+      <Guess
+        data={character}
+        entity='characters'
+        property='slug'
+        imageSrc={character.image}
+        tips={characterQuizTips}
+        placeholder='Which character is this?'
+      />
+    </section>
   );
 }

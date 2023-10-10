@@ -18,11 +18,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang='en' className='relative overflow-hidden'>
+    <html lang='en' className='relative overflow-auto py-12 min-h-screen'>
       <body className={inter.className}>
-        <Nav />
         <ThemeProvider attribute='class' defaultTheme='dark'>
-          <main className='flex min-h-screen flex-col items-center justify-between'>
+          <main className='flex flex-col items-center'>
+            <Nav />
             {children}
           </main>
         </ThemeProvider>

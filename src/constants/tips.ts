@@ -1,5 +1,9 @@
 const characterQuizTips = [
   {
+    label: 'Name',
+    key: 'name',
+  },
+  {
     label: 'Anime',
     key: 'anime.title',
   },
@@ -41,7 +45,11 @@ const characterQuizTips = [
   },
 ];
 
-const characterAnimeQuizTips = [
+const animeQuizTips = [
+  {
+    label: 'Name',
+    key: 'title',
+  },
   {
     label: 'Year',
     key: 'year',
@@ -80,4 +88,4 @@ const characterAnimeQuizTips = [
   },
 ];
 
-export { characterQuizTips, characterAnimeQuizTips };
+export { characterQuizTips, animeQuizTips };

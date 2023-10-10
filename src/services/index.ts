@@ -1,1 +1,1 @@
-export { default as getCurrentCharacter } from './getCurrentCharacter';
+export { default as getTodaysData } from './getTodaysData';

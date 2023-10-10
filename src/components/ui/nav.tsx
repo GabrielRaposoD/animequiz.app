@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 const Nav = () => {
   return (
-    <nav className='flex flex-row items-center justify-center w-full mt-12'>
+    <nav className='flex flex-row items-center justify-center w-full'>
       <Link
         href='/'
         className='relative transition-all duration-500 hover:-translate-y-3 hover:scale-110 cursor-pointer flex items-center justify-center overflow-hidden w-[300px] md:w-[400px] h-[100px]'

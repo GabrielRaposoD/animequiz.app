@@ -5,11 +5,11 @@ import { prisma } from '@/lib';
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
 
-  const query = searchParams.get('name');
+  const query = searchParams.get('slug');
 
   const characters = await prisma.character.findMany({
     where: {
-      name: {
+      slug: {
         contains: query || '',
         mode: 'insensitive',
       },
