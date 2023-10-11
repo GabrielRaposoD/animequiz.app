@@ -1,21 +1,30 @@
+import { getTimeUntilNewSeed, getTodaysData } from '@/services';
+
 import { CharacterWithAnime } from '@/types';
 import Guess from '@/components/game/guess';
 import { animeQuizTips } from '@/constants/tips';
-import { getTodaysData } from '@/services';
 
 export default async function CharacterAnimeQuiz() {
-  const character = (await getTodaysData('character', 2)) as CharacterWithAnime;
+  const { data, seed } = await getTodaysData<CharacterWithAnime>(
+    'character',
+    2
+  );
+  const date = await getTimeUntilNewSeed();
+
+  console.log(data);
 
   return (
-    <main className='flex min-h-screen flex-col items-center justify-between'>
+    <section className='flex flex-col items-center'>
       <Guess
-        data={character.anime}
+        data={data.anime}
         entity='animes'
         property='title'
-        imageSrc={character.image}
+        imageSrc={data.image}
         tips={animeQuizTips}
         placeholder='Which anime is this character from?'
+        date={date}
+        seed={seed}
       />
-    </main>
+    </section>
   );
 }

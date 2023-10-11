@@ -1,5 +1,7 @@
-/** @type {import('tailwindcss').Config} */
-module.exports = {
+import type { Config } from 'tailwindcss';
+import defaultTheme from 'tailwindcss/defaultTheme';
+
+const config: Config = {
   darkMode: ['class'],
   content: [
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
@@ -15,6 +17,11 @@ module.exports = {
       },
     },
     extend: {
+      fontFamily: {
+        daniel: ['var(--font-daniel)'],
+        danielbk: ['var(--font-danielbk)'],
+        danielbd: ['var(--font-danielbd)'],
+      },
       colors: {
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
@@ -57,12 +64,12 @@ module.exports = {
       },
       keyframes: {
         'accordion-down': {
-          from: { height: 0 },
+          from: { height: '0' },
           to: { height: 'var(--radix-accordion-content-height)' },
         },
         'accordion-up': {
           from: { height: 'var(--radix-accordion-content-height)' },
-          to: { height: 0 },
+          to: { height: '0' },
         },
       },
       animation: {
@@ -73,3 +80,5 @@ module.exports = {
   },
   plugins: [require('tailwindcss-animate')],
 };
+
+export default config;

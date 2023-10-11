@@ -1,21 +1,25 @@
+import { getTimeUntilNewSeed, getTodaysData } from '@/services';
+
 import { Anime } from '@prisma/client';
 import Guess from '@/components/game/guess';
 import { animeQuizTips } from '@/constants/tips';
-import { getTodaysData } from '@/services';
 
 export default async function AnimeQuiz() {
-  const anime = (await getTodaysData('anime')) as Anime;
+  const { data, seed } = await getTodaysData<Anime>('anime');
+  const date = await getTimeUntilNewSeed();
 
   return (
-    <main className='flex min-h-screen flex-col items-center justify-between'>
+    <section className='flex flex-col items-center'>
       <Guess
-        data={anime}
+        data={data}
         entity='animes'
         property='title'
-        imageSrc={anime.banner}
+        imageSrc={data.banner}
         tips={animeQuizTips}
         placeholder='Which anime is this?'
+        date={date}
+        seed={seed}
       />
-    </main>
+    </section>
   );
 }

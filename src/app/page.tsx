@@ -38,7 +38,7 @@ export default async function Home() {
     <section className='flex flex-col items-center flex-1'>
       <Card className='mt-16 bg-gradient-to-tr from-card via-zinc-600/20 to-card'>
         <CardHeader className='text-center'>
-          <CardTitle>Welcome!</CardTitle>
+          <CardTitle className='font-danielbd text-4xl'>Welcome!</CardTitle>
           <CardDescription>Put your anime knowledge to work</CardDescription>
         </CardHeader>
         <CardContent>

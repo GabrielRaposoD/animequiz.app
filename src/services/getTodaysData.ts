@@ -1,18 +1,19 @@
 import Prando from 'prando';
+import { Seed } from '@prisma/client';
 import getSeed from './getSeed';
 import { prisma } from '@/lib';
 
-const getTodaysData = async (
+const getTodaysData = async <T>(
   entity: 'anime' | 'character',
   rngIteration = 1
-) => {
+): Promise<{ data: T; seed: Seed }> => {
   const currentSeed = await getSeed();
 
   const rng = new Prando(currentSeed!.seed);
 
   let rngNum = 0;
 
-  if (entity === 'character') {
+  if (entity) {
     for (let i = 0; i < rngIteration; i++) {
       rngNum = rng.nextInt(1, currentSeed.characterCount) - 1;
     }
@@ -35,13 +36,13 @@ const getTodaysData = async (
       },
     });
 
-    return character[0];
+    return { data: character[0] as T, seed: currentSeed };
   } else {
     for (let i = 0; i < rngIteration; i++) {
       rngNum = rng.nextInt(1, currentSeed.animeCount) - 1;
     }
 
-    const anime = await prisma[entity].findMany({
+    const anime = await prisma.anime.findMany({
       skip: rngNum,
       take: 1,
       orderBy: {
@@ -49,7 +50,7 @@ const getTodaysData = async (
       },
     });
 
-    return anime[0];
+    return { data: anime[0] as T, seed: currentSeed };
   }
 };
 

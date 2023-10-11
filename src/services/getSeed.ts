@@ -6,7 +6,7 @@ import { prisma } from '@/lib';
 const getSeed = async () => {
   const config = (await prisma.config.findFirst({})) as Config;
 
-  const currentDay = differenceInDays(new Date(config.createdAt), new Date());
+  const currentDay = differenceInDays(new Date(), config.createdAt);
 
   const seeds = await prisma.seed.findMany({});
 

@@ -56,7 +56,7 @@ export function Combobox({
           variant='outline'
           role='combobox'
           aria-expanded={open}
-          className='md:w-[400px] w-full justify-between capitalize'
+          className='w-full justify-between'
           disabled={disabled}
         >
           {value ? value : placeholder}
@@ -84,6 +84,7 @@ export function Combobox({
                     setOpen(false);
                   }}
                   disabled={disabledItems.includes(item.value)}
+                  className='font-sans cursor-pointer'
                 >
                   <X
                     className={cn(
