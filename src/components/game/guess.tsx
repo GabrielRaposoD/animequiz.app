@@ -204,8 +204,18 @@ const Guess = <GameType extends unknown>({
                         content={
                           Array.isArray(content) ? content.join(', ') : content
                         }
-                        text={tip.label}
+                        label={tip.label}
                         variant={tipParser(content, itemData)}
+                        numberIs={
+                          typeof content !== 'number' ||
+                          typeof itemData !== 'number'
+                            ? 'equal'
+                            : content > itemData
+                            ? 'less'
+                            : content < itemData
+                            ? 'greater'
+                            : 'equal'
+                        }
                       />
                     </motion.li>
                   );

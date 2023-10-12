@@ -13,26 +13,27 @@ const getTodaysData = async <T>(
 
   let rngNum = 0;
 
-  if (entity) {
+  if (entity === 'character') {
     for (let i = 0; i < rngIteration; i++) {
       rngNum = rng.nextInt(1, currentSeed.characterCount) - 1;
     }
 
     const character = await prisma.character.findMany({
-      where: {
-        NOT: {
-          image: {
-            contains: 'questionmark_23.gif',
-          },
-        },
-      },
       skip: rngNum,
       take: 1,
       orderBy: {
         id: 'asc',
       },
       include: {
-        anime: true,
+        animes: {
+          take: 1,
+          orderBy: {
+            year: 'desc',
+          },
+          include: {
+            sequels: true,
+          },
+        },
       },
     });
 

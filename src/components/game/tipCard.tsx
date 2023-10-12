@@ -1,14 +1,17 @@
+import { ArrowBigDown, ArrowBigUp } from 'lucide-react';
+
 import { cn } from '@/lib/utils';
 import { cva } from 'class-variance-authority';
 
 type TipCardProps = {
-  text: string;
+  label: string;
   content: string | number;
   variant: 'correct' | 'incorrect' | 'partial';
+  numberIs?: 'greater' | 'less' | 'equal';
 };
 
 const buttonVariants = cva(
-  'rounded-lg text-card-foreground p-2 w-24 h-24 flex items-center justify-center text-center',
+  'rounded-lg text-card-foreground p-2 w-24 h-24 flex items-center justify-center text-center relative',
   {
     variants: {
       variant: {
@@ -23,12 +26,39 @@ const buttonVariants = cva(
   }
 );
 
-const TipCard = ({ content, variant, text }: TipCardProps) => {
+const TipCard = ({
+  content,
+  variant,
+  label,
+  numberIs = 'equal',
+}: TipCardProps) => {
   return (
     <div className='flex flex-col gap-y-2 items-center'>
-      <span>{text}</span>
+      <span>{label}</span>
       <div className={cn(buttonVariants({ variant }))}>
-        <p>{content}</p>
+        <p className='capitalize flex flex-row flex-wrap items-center justify-center z-10'>
+          {typeof content === 'string'
+            ? content.toLowerCase()
+            : content === -1
+            ? 'Unknown'
+            : content}
+        </p>
+        {numberIs === 'greater' && (
+          <ArrowBigUp
+            className='absolute pointer-events-none text-rose-900/90'
+            strokeWidth={1}
+            fill='rgb(136 19 55 / 0.9)'
+            size={90}
+          />
+        )}
+        {numberIs === 'less' && (
+          <ArrowBigDown
+            className='absolute pointer-events-none text-rose-900/90'
+            strokeWidth={1}
+            fill='rgb(136 19 55 / 0.9)'
+            size={90}
+          />
+        )}
       </div>
     </div>
   );

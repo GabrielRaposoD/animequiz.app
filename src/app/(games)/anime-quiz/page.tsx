@@ -14,7 +14,7 @@ export default async function AnimeQuiz() {
         data={data}
         entity='animes'
         property='title'
-        imageSrc={data.banner}
+        imageSrc={data.image}
         tips={animeQuizTips}
         placeholder='Which anime is this?'
         date={date}

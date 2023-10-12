@@ -8,7 +8,7 @@ export async function POST(request: NextRequest) {
 
   const seed = await prisma.seed.findUnique({
     where: {
-      id: Number(res.seedId),
+      id: res.seedId,
     },
   });
 
@@ -26,16 +26,14 @@ export async function POST(request: NextRequest) {
     }
   });
 
-  console.log(info);
-
-  // await prisma.seed.update({
-  //   where: {
-  //     id: Number(res.seedId),
-  //   },
-  //   data: {
-  //     info,
-  //   },
-  // });
+  await prisma.seed.update({
+    where: {
+      id: res.seedId,
+    },
+    data: {
+      info,
+    },
+  });
 
   return NextResponse.json('success');
 }

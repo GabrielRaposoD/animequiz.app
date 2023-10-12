@@ -5,43 +5,31 @@ const characterQuizTips = [
   },
   {
     label: 'Anime',
-    key: 'anime.title',
+    key: 'animes[0].title',
   },
   {
     label: 'Year',
-    key: 'anime.year',
+    key: 'animes[0].year',
   },
   {
     label: 'Season',
-    key: 'anime.season',
+    key: 'animes[0].season',
   },
   {
-    label: 'Type',
-    key: 'anime.type',
-  },
-  {
-    label: 'Rating',
-    key: 'anime.rating',
-  },
-  {
-    label: 'Studio',
-    key: 'anime.studio',
+    label: 'Studios',
+    key: 'animes[0].studios',
   },
   {
     label: 'Source',
-    key: 'anime.source',
+    key: 'animes[0].source',
   },
   {
     label: 'Genres',
-    key: 'anime.genres',
-  },
-  {
-    label: 'Themes',
-    key: 'anime.themes',
+    key: 'animes[0].genres',
   },
   {
     label: 'Episodes',
-    key: 'anime.episodes',
+    key: 'animes[0].episodes',
   },
 ];
 
@@ -59,32 +47,28 @@ const animeQuizTips = [
     key: 'season',
   },
   {
-    label: 'Type',
-    key: 'type',
-  },
-  {
-    label: 'Rating',
-    key: 'rating',
-  },
-  {
-    label: 'Studio',
-    key: 'studio',
+    label: 'Studios',
+    key: 'studios',
   },
   {
     label: 'Source',
     key: 'source',
   },
   {
+    label: 'Country of Origin',
+    key: 'countryOfOrigin',
+  },
+  {
     label: 'Genres',
     key: 'genres',
   },
   {
-    label: 'Themes',
-    key: 'themes',
-  },
-  {
     label: 'Episodes',
     key: 'episodes',
+  },
+  {
+    label: 'Duration',
+    key: 'duration',
   },
 ];
 

@@ -5,21 +5,53 @@ import { prisma } from '@/lib';
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
 
-  const query = searchParams.get('slug');
+  const query = searchParams.get('name');
 
   const characters = await prisma.character.findMany({
     where: {
-      slug: {
-        contains: query || '',
-        mode: 'insensitive',
-      },
+      OR: [
+        {
+          name: {
+            contains: query || '',
+            mode: 'insensitive',
+          },
+        },
+        {
+          animes: {
+            some: {
+              title: {
+                contains: query || '',
+                mode: 'insensitive',
+              },
+            },
+          },
+        },
+        {
+          animes: {
+            some: {
+              sequels: {
+                some: {
+                  title: {
+                    contains: query || '',
+                    mode: 'insensitive',
+                  },
+                },
+              },
+            },
+          },
+        },
+      ],
     },
     orderBy: {
       name: 'asc',
     },
     take: 100,
     include: {
-      anime: true,
+      animes: {
+        include: {
+          sequels: true,
+        },
+      },
     },
   });
 
