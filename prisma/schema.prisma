@@ -10,33 +10,20 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum AnimeType {
+enum AnimeFormat {
   TV
-  OVA
-  Movie
-  Special
-  ONA
-  Music
 }
 
 enum Season {
-  winter
-  spring
-  summer
-  fall
-}
-
-enum Rating {
-  G
-  PG
-  PG13
-  R17
-  R
-  RX
+  WINTER
+  SPRING
+  SUMMER
+  FALL
+  UNKNOWN
 }
 
 model Config {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(cuid())
   animePage Int      @default(1)
   seeds     Seed[]
   createdAt DateTime @default(now())
@@ -44,39 +31,54 @@ model Config {
 }
 
 model Seed {
-  id        Int      @id @default(autoincrement())
-  seed      String   @unique
-  day       Int      @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  config    Config   @relation(fields: [configId], references: [id])
-  configId  Int
+  id             String   @id @default(cuid())
+  seed           String   @unique
+  day            Int      @unique
+  characterCount Int
+  animeCount     Int
+  info           Json     @default("[{ \"game\": \"character\", \"tries\": 0, \"success\": 0}, { \"game\": \"anime\", \"tries\": 0, \"success\": 0}, { \"game\": \"characterAnime\", \"tries\": 0, \"success\": 0}]")
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  config         Config   @relation(fields: [configId], references: [id])
+  configId       String
 }
 
 model Anime {
-  id            Int         @id @default(autoincrement())
-  myAnimeListId Int         @unique
-  title         String      @unique
-  banner        String
-  synopsis      String
-  year          Int
-  genres        String[]
-  themes        String[]
-  studio        String
-  episodes      Int
-  source        String
-  season        Season?
-  type          AnimeType
-  rating        Rating
-  characters    Character[]
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
+  id              Int         @id @default(autoincrement())
+  apiId           String      @unique
+  title           String      @unique
+  image           String
+  year            Int         @default(-1)
+  genres          String[]
+  studios         String[]
+  sequels         Sequel[]
+  episodes        Int         @default(-1)
+  source          String
+  season          Season      @default(UNKNOWN)
+  duration        Int         @default(24)
+  countryOfOrigin String      @default("Japan")
+  format          AnimeFormat
+  characters      Character[]
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+}
+
+model Sequel {
+  id         Int      @id @default(autoincrement())
+  apiId      String   @unique
+  title      String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  Anime      Anime    @relation(fields: [animeApiId], references: [apiId])
+  animeApiId String
 }
 
 model Character {
-  id      Int    @id @default(autoincrement())
-  name    String @unique
-  image   String
-  Anime   Anime  @relation(fields: [animeId], references: [id])
-  animeId Int
+  id     Int     @id @default(autoincrement())
+  name   String
+  age    String
+  gender String
+  image  String
+  apiId  String  @unique
+  animes Anime[]
 }
