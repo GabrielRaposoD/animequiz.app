@@ -55,7 +55,7 @@ const animeQuizTips = [
     key: 'source',
   },
   {
-    label: 'Country of Origin',
+    label: 'Country',
     key: 'countryOfOrigin',
   },
   {

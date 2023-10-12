@@ -123,7 +123,7 @@ const Guess = <GameType extends unknown>({
                   placeholder={placeholder}
                   disabled={correct}
                   disabledItems={selectedItems.map((item) =>
-                    get<string>(item, property)
+                    get<string>(item, 'apiId')
                   )}
                 />
               </motion.div>
