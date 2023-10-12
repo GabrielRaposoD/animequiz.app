@@ -75,12 +75,12 @@ export function Combobox({
             {items.length === 0 ? 'Item not found.' : 'Loading...'}
           </CommandEmpty>
           <CommandGroup className='max-h-64 overflow-y-auto'>
-            {items.map((item) => {
+            {items.map((item, i) => {
               return (
                 <CommandItem
-                  key={item.value}
-                  onSelect={(currentValue) => {
-                    onChange(currentValue, 'select');
+                  key={item.label}
+                  onSelect={() => {
+                    onChange(item.value, 'select');
                     setOpen(false);
                   }}
                   disabled={disabledItems.includes(item.value)}

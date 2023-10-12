@@ -141,7 +141,7 @@ const Guess = <GameType extends unknown>({
                   {get<string>(data, property)}
                 </p>
                 <p>Number of tries</p>
-                <p className='-mt-1.5 font-daniel'>{tries + 1}</p>
+                <p className='-mt-1.5 font-daniel'>{tries}</p>
                 <p>Next game in</p>
                 <div className='flex flex-row -mt-1.5 gap-x-0.5'>
                   {[

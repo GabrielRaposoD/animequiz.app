@@ -17,14 +17,17 @@ function useGame<T>(item: T, entity: string, property: string, seed: Seed) {
   const [items, setItems] = useState<T[]>([]);
   const path = usePathname();
 
-  const parsedItems = useMemo(
-    () =>
-      items.map((item) => ({
-        label: get<string>(item, property),
-        value: get<string>(item, property),
-      })),
-    [items, property]
-  );
+  const parsedItems = useMemo(() => {
+    return items.map((item) => ({
+      label:
+        entity === 'characters'
+          ? get<string>(item, property) +
+            ' - ' +
+            get<string>(item, 'animes[0].title')
+          : get<string>(item, property),
+      value: get<string>(item, 'apiId'),
+    }));
+  }, [items, property, entity]);
 
   const getItems = async (query = '') => {
     const response = await fetch(`/api/${entity}?${property}=${query}`);
@@ -53,7 +56,7 @@ function useGame<T>(item: T, entity: string, property: string, seed: Seed) {
   const onItemSelect = async (value: string) => {
     const selectedItem = items.find(
       (item) =>
-        get<string>(item, property).toLocaleLowerCase() ===
+        get<string>(item, 'apiId').toLocaleLowerCase() ===
         value.toLocaleLowerCase()
     ) as T;
 
@@ -90,6 +93,8 @@ function useGame<T>(item: T, entity: string, property: string, seed: Seed) {
 
     localStorage.setItem('game', JSON.stringify(userData));
 
+    setTries((prev) => prev + 1);
+
     if (isCorrect) {
       await fetch('/api/game/success', {
         method: 'POST',
@@ -99,13 +104,12 @@ function useGame<T>(item: T, entity: string, property: string, seed: Seed) {
           game: pathGame[path],
         }),
       });
-    } else {
-      setTries((prev) => prev + 1);
     }
   };
 
   const onItemValueChange = (value: string, type: 'select' | 'input') => {
     if (type === 'select') {
+      console.log(value);
       onItemSelect(value);
     } else {
       getItems(value);
