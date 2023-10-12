@@ -20,9 +20,8 @@ export async function POST(request: NextRequest) {
 
   info.forEach((i: any) => {
     if (i['game'] === res.game) {
-      const tries = i['tries'] ?? 0;
       i['success'] = i['success'] + 1;
-      i['tries'] = i['tries'] + tries;
+      i['tries'] = i['tries'] + res.tries;
     }
   });
 

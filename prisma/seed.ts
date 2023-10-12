@@ -44,6 +44,7 @@ const query = `query ($page: Int) {
               format
               source
               seasonYear
+              season
               duration
               countryOfOrigin
               startDate {

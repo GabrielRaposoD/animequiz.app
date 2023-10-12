@@ -1,5 +1,6 @@
 import './globals.css';
 
+import { Analytics } from '@vercel/analytics/react';
 import LocalFont from 'next/font/local';
 import type { Metadata } from 'next';
 import Nav from '@/components/ui/nav';
@@ -39,7 +40,7 @@ export default function RootLayout({
         )}
       >
         <ThemeProvider attribute='class' defaultTheme='dark'>
-          <main className='flex flex-col items-center font-sans py-12 relative overflow-auto min-h-screen'>
+          <main className='flex flex-col items-center font-sans py-12 relative overflow-y-auto overflow-x-hidden min-h-screen'>
             <Nav />
             <Particles
               className='absolute inset-0 -z-10 animate-fade-in min-h-screen'
@@ -48,6 +49,7 @@ export default function RootLayout({
             {children}
           </main>
         </ThemeProvider>
+        <Analytics />
       </body>
     </html>
   );

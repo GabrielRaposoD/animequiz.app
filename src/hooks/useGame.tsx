@@ -4,6 +4,12 @@ import { Seed } from '@prisma/client';
 import { get } from 'radash';
 import { usePathname } from 'next/navigation';
 
+const pathGame: { [key: string]: string } = {
+  '/character-anime-quiz': 'characterAnime',
+  '/character-quiz': 'character',
+  '/anime-quiz': 'anime',
+};
+
 function useGame<T>(item: T, entity: string, property: string, seed: Seed) {
   const [correct, setCorrect] = useState<boolean>(false);
   const [tries, setTries] = useState<number>(0);
@@ -44,7 +50,7 @@ function useGame<T>(item: T, entity: string, property: string, seed: Seed) {
     }
   }, []);
 
-  const onItemSelect = (value: string) => {
+  const onItemSelect = async (value: string) => {
     const selectedItem = items.find(
       (item) =>
         get<string>(item, property).toLocaleLowerCase() ===
@@ -59,25 +65,42 @@ function useGame<T>(item: T, entity: string, property: string, seed: Seed) {
 
     setCorrect(isCorrect);
 
-    if (!isCorrect) {
-      setTries((prev) => prev + 1);
-    } else {
-      const userDataJson = localStorage.getItem('game');
+    const userData = JSON.parse(localStorage.getItem('game') ?? '{}');
 
-      const userData = userDataJson ? JSON.parse(userDataJson) : {};
+    if (!userData[path]) {
+      userData[path] = [];
+    }
+    const index = userData[path].findIndex((d: any) => d.day === seed.day);
 
-      if (!userData[path]) {
-        userData[path] = [];
-      }
-
-      userData[path].push({
-        correct: true,
-        selectedItems: [selectedItem, ...selectedItems],
-        tries,
+    if (index !== -1) {
+      userData[path][index] = {
         day: seed.day,
+        correct: isCorrect,
+        tries: tries + 1,
+        selectedItems: [selectedItem, ...selectedItems],
+      };
+    } else {
+      userData[path].push({
+        day: seed.day,
+        correct: isCorrect,
+        tries: tries + 1,
+        selectedItems: [selectedItem, ...selectedItems],
       });
+    }
 
-      localStorage.setItem('game', JSON.stringify(userData));
+    localStorage.setItem('game', JSON.stringify(userData));
+
+    if (isCorrect) {
+      await fetch('/api/game/success', {
+        method: 'POST',
+        body: JSON.stringify({
+          seedId: seed.id,
+          tries: tries + 1,
+          game: pathGame[path],
+        }),
+      });
+    } else {
+      setTries((prev) => prev + 1);
     }
   };
 

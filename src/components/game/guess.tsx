@@ -208,7 +208,8 @@ const Guess = <GameType extends unknown>({
                         variant={tipParser(content, itemData)}
                         numberIs={
                           typeof content !== 'number' ||
-                          typeof itemData !== 'number'
+                          typeof itemData !== 'number' ||
+                          content === -1
                             ? 'equal'
                             : content > itemData
                             ? 'less'

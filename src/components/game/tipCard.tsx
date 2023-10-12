@@ -11,7 +11,7 @@ type TipCardProps = {
 };
 
 const buttonVariants = cva(
-  'rounded-lg text-card-foreground p-2 w-24 h-24 flex items-center justify-center text-center relative',
+  'rounded-lg text-card-foreground p-2 w-24 h-24 flex items-center justify-center text-center relative overflow-y-auto overflow-x-hidden no-scrollbar',
   {
     variants: {
       variant: {

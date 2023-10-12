@@ -48,6 +48,10 @@ export async function GET(request: NextRequest) {
     take: 100,
     include: {
       animes: {
+        take: 1,
+        orderBy: {
+          year: 'desc',
+        },
         include: {
           sequels: true,
         },
