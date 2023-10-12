@@ -39,12 +39,20 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: 'animequiz.app',
+    title: 'Anime Quiz',
     description: 'Put your anime knowledge to the test!',
     url: 'https://animequiz.app',
     siteName: 'animequiz.app',
     locale: 'en_US',
     type: 'website',
+    images: [
+      {
+        url: 'https://assets-raposo.s3.us-east-1.amazonaws.com/logo.png',
+        width: 1284,
+        height: 1284,
+        alt: 'animequiz.app logo',
+      },
+    ],
   },
 };
 
