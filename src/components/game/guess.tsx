@@ -209,7 +209,8 @@ const Guess = <GameType extends unknown>({
                         numberIs={
                           typeof content !== 'number' ||
                           typeof itemData !== 'number' ||
-                          content === -1
+                          content === -1 ||
+                          itemData === -1
                             ? 'equal'
                             : content > itemData
                             ? 'less'

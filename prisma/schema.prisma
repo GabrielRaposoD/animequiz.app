@@ -55,7 +55,7 @@ model Anime {
   episodes        Int         @default(-1)
   source          String
   season          Season      @default(UNKNOWN)
-  duration        Int         @default(24)
+  duration        Int         @default(-1)
   countryOfOrigin String      @default("Japan")
   format          AnimeFormat
   characters      Character[]

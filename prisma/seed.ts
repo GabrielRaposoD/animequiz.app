@@ -70,7 +70,7 @@ const query = `query ($page: Int) {
 }
 }`;
 
-const FETCH_AMOUNT = 2;
+const FETCH_AMOUNT = 100;
 
 const whitelist = ['21'];
 
@@ -157,7 +157,7 @@ async function main() {
               year: node.seasonYear ?? node.startDate.year ?? -1,
               studios: node.studios.nodes.map((studio: any) => studio.name),
               relations: relations,
-              duration: node.duration,
+              duration: node.duration ?? -1,
               countryOfOrigin: getCountryName(node.countryOfOrigin),
             };
           }
@@ -285,50 +285,56 @@ async function main() {
     Prisma.CharacterCreateInput & { animesId: string[] }
   > = Object.values(flatData.characters);
 
-  await Promise.all(
-    charactersData.map(async (character) => {
-      const animes = await prisma.anime.findMany({
-        where: {
-          OR: [
-            {
-              apiId: {
-                in: character.animesId,
-              },
+  await parallel(30, charactersData, async (character) => {
+    const animes = await prisma.anime.findMany({
+      where: {
+        OR: [
+          {
+            apiId: {
+              in: character.animesId,
             },
-            {
-              sequels: {
-                some: {
-                  animeApiId: {
-                    in: character.animesId,
-                  },
+          },
+          {
+            sequels: {
+              some: {
+                animeApiId: {
+                  in: character.animesId,
                 },
               },
             },
-          ],
-        },
-        include: {
-          sequels: true,
-        },
-      });
-
-      if (!animes.length) return;
-
-      return await prisma.character.create({
-        data: {
-          apiId: character.apiId,
-          name: character.name,
-          image: character.image,
-          age: character.age.toString(),
-          gender: character.gender,
-          animes: {
-            connect: animes.map((anime) => ({
-              apiId: anime.apiId,
-            })),
           },
+        ],
+      },
+      include: {
+        sequels: true,
+      },
+    });
+
+    if (!animes.length) return;
+
+    const exists = await prisma.character.findUnique({
+      where: {
+        apiId: character.apiId,
+      },
+    });
+
+    if (exists) return;
+
+    return await prisma.character.create({
+      data: {
+        apiId: character.apiId,
+        name: character.name,
+        image: character.image,
+        age: character.age.toString(),
+        gender: character.gender,
+        animes: {
+          connect: animes.map((anime) => ({
+            apiId: anime.apiId,
+          })),
         },
-      });
-    })
-  );
+      },
+    });
+  });
 
   console.log('finished inserting character data');
 
