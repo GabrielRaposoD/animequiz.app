@@ -2,11 +2,11 @@ import { NextRequest, NextResponse } from 'next/server';
 
 import { Prisma } from '@prisma/client';
 import { Ratelimit } from '@upstash/ratelimit';
-import { kv } from '@vercel/kv';
+import { Redis } from '@upstash/redis';
 import { prisma } from '@/lib';
 
 const ratelimit = new Ratelimit({
-  redis: kv,
+  redis: Redis.fromEnv(),
   limiter: Ratelimit.slidingWindow(2, '10 s'),
 });
 

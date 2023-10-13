@@ -104,85 +104,91 @@ async function main() {
 
     const characters = res.data.Page.characters;
 
-    const parsedData = characters.reduce(
-      (
-        acc: {
-          animes: {
-            [k: string]: Prisma.AnimeCreateInput & { relations: any[] };
-          };
-          characters: {
-            [k: string]: Prisma.CharacterCreateInput & { animesId: string[] };
-          };
-        },
-        character: any
-      ) => {
-        const animesId: any[] = [];
+    const parsedData = characters
+      .filter(
+        (c: any) =>
+          c.image !==
+          'https://s4.anilist.co/file/anilistcdn/character/large/default.jpg'
+      )
+      .reduce(
+        (
+          acc: {
+            animes: {
+              [k: string]: Prisma.AnimeCreateInput & { relations: any[] };
+            };
+            characters: {
+              [k: string]: Prisma.CharacterCreateInput & { animesId: string[] };
+            };
+          },
+          character: any
+        ) => {
+          const animesId: any[] = [];
 
-        const filteredAnimes = character.media.nodes.filter(
-          (node: any) =>
-            node.type !== 'MANGA' && node.format === 'TV' && !node.isAdult
-        );
+          const filteredAnimes = character.media.nodes.filter(
+            (node: any) =>
+              node.type !== 'MANGA' && node.format === 'TV' && !node.isAdult
+          );
 
-        filteredAnimes.forEach((node: any) => {
-          const id = node.id.toString();
-          if (!acc.animes[id]) {
-            const relations: any[] = [];
+          filteredAnimes.forEach((node: any) => {
+            const id = node.id.toString();
+            if (!acc.animes[id]) {
+              const relations: any[] = [];
 
-            node.relations.edges.forEach((edge: any) => {
-              const relation = edge.relationType;
-              const id = edge.node.id.toString();
+              node.relations.edges.forEach((edge: any) => {
+                const relation = edge.relationType;
+                const id = edge.node.id.toString();
 
-              if (
-                relation === 'PREQUEL' ||
-                relation === 'SEQUEL' ||
-                relation === 'ALTERNATIVE'
-              ) {
-                relations.push({
-                  id: id,
-                  type: relation,
-                  title: edge.node.title.romaji,
-                });
-              }
-            });
+                if (
+                  relation === 'PREQUEL' ||
+                  relation === 'SEQUEL' ||
+                  relation === 'ALTERNATIVE'
+                ) {
+                  relations.push({
+                    id: id,
+                    type: relation,
+                    title: edge.node.title.romaji,
+                  });
+                }
+              });
 
-            acc.animes[id] = {
+              acc.animes[id] = {
+                apiId: id,
+                title: node.title.romaji,
+                image: node.coverImage.extraLarge,
+                episodes: node.episodes ?? -1,
+                genres: node.genres,
+                format: node.format,
+                source: node.source ?? 'UNKNOWN',
+                season: node.season ?? 'UNKNOWN',
+                year: node.seasonYear ?? node.startDate.year ?? -1,
+                studios: node.studios.nodes.map((studio: any) => studio.name),
+                relations: relations,
+                duration: node.duration ?? -1,
+                countryOfOrigin: getCountryName(node.countryOfOrigin),
+              };
+            }
+
+            animesId.push(id);
+          });
+
+          if (animesId.length > 0) {
+            const id = character.id.toString();
+            acc.characters[id] = {
+              age: character.age
+                ? character.age.slice(0, 3).replace(/\D/g, '')
+                : 'Unknown',
+              name: character.name.full,
+              image: character.image.large,
+              gender: character.gender ?? 'Unknown',
               apiId: id,
-              title: node.title.romaji,
-              image: node.coverImage.extraLarge,
-              episodes: node.episodes ?? -1,
-              genres: node.genres,
-              format: node.format,
-              source: node.source ?? 'UNKNOWN',
-              season: node.season ?? 'UNKNOWN',
-              year: node.seasonYear ?? node.startDate.year ?? -1,
-              studios: node.studios.nodes.map((studio: any) => studio.name),
-              relations: relations,
-              duration: node.duration ?? -1,
-              countryOfOrigin: getCountryName(node.countryOfOrigin),
+              animesId: animesId,
             };
           }
 
-          animesId.push(id);
-        });
-
-        if (animesId.length > 0) {
-          const id = character.id.toString();
-          acc.characters[id] = {
-            age: character.age
-              ? character.age.slice(0, 3).replace(/\D/g, '')
-              : 'Unknown',
-            name: character.name.full,
-            image: character.image.large,
-            gender: character.gender ?? 'Unknown',
-            apiId: id,
-            animesId: animesId,
-          };
-        }
-
-        return acc;
-      },
-      { animes: {}, characters: {} }
-    );
+          return acc;
+        },
+        { animes: {}, characters: {} }
+      );
 
     await sleep(1000);
 
