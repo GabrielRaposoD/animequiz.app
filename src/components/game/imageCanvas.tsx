@@ -1,5 +1,7 @@
 'use client';
 
+import 'context-filter-polyfill';
+
 import { useEffect, useRef, useState } from 'react';
 
 import { Skeleton } from '../ui/skeleton';

@@ -1,5 +1,4 @@
 import './globals.css';
-import 'context-filter-polyfill';
 
 import { Analytics } from '@vercel/analytics/react';
 import LocalFont from 'next/font/local';
