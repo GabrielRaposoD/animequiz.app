@@ -16,7 +16,6 @@ export const metadata: Metadata = {
     'Game',
     'Loldle',
     'Loldle Anime Quiz',
-    'Loldle',
     'Anime Quiz',
     'Wordle',
     'Anime Game',

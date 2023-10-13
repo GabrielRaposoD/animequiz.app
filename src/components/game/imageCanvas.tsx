@@ -1,7 +1,5 @@
 'use client';
 
-import 'context-filter-polyfill';
-
 import { useEffect, useRef, useState } from 'react';
 
 import { Skeleton } from '../ui/skeleton';
@@ -62,6 +60,11 @@ const ImageCanvas = ({
       <canvas
         ref={canvasRef}
         className={cn('rounded-md hidden', loaded ? 'block' : 'hidden')}
+        style={
+          typeof window !== 'undefined' && window.innerWidth <= 600
+            ? { filter: `blur(${correct ? 0 : 25 - tries}px)` }
+            : {}
+        }
       />
       <Skeleton
         className={cn(loaded ? 'hidden' : 'block')}

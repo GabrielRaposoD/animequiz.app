@@ -1091,11 +1091,6 @@ concat-map@0.0.1:
   resolved "https://registry.yarnpkg.com/concat-map/-/concat-map-0.0.1.tgz#d8a96bd77fd68df7793a73036a3ba0d5405d477b"
   integrity sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==
 
-context-filter-polyfill@^0.3.6:
-  version "0.3.6"
-  resolved "https://registry.yarnpkg.com/context-filter-polyfill/-/context-filter-polyfill-0.3.6.tgz#e460f759ad28f773c7023d2d488d74ae7429bcdb"
-  integrity sha512-NV2/op48+p+v4eueErpUszzrURW0QPvvvUQqvuA8V20e69cCP1m8R4N43iECASbWvbim+EFwruX6bPil6s070g==
-
 create-require@^1.1.0:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/create-require/-/create-require-1.1.1.tgz#c1d7e8f1e5f6cfc9ff65f9cd352d37348756c333"
