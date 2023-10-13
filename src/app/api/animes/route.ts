@@ -31,7 +31,7 @@ export async function GET(request: NextRequest) {
     orderBy: {
       title: 'asc',
     },
-    take: 100,
+    take: 300,
   });
 
   return NextResponse.json(animes);

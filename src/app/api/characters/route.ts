@@ -53,7 +53,7 @@ export async function GET(request: NextRequest) {
     orderBy: {
       name: 'asc',
     },
-    take: 100,
+    take: 300,
     include: {
       animes: {
         take: 1,
