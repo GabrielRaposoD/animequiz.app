@@ -33,6 +33,14 @@ export async function GET(request: NextRequest) {
 
   const characters = await prisma.character.findMany({
     where: {
+      NOT: [
+        {
+          image: {
+            contains:
+              'https://s4.anilist.co/file/anilistcdn/character/large/default.jpg',
+          },
+        },
+      ],
       OR: [
         {
           name: {
