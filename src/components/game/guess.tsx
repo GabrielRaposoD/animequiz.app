@@ -24,6 +24,7 @@ type GameProps<GameType> = {
   placeholder: string;
   date: Date;
   seed: Seed;
+  viewport: 'mobile' | 'desktop';
 };
 
 const containerAnimation = {
@@ -55,6 +56,7 @@ const Guess = <GameType extends unknown>({
   placeholder,
   date,
   seed,
+  viewport,
 }: GameProps<GameType>) => {
   const { correct, onItemValueChange, parsedItems, selectedItems, tries } =
     useGame<GameType>(data, entity, property, seed);
@@ -107,7 +109,12 @@ const Guess = <GameType extends unknown>({
           )}
         </AnimatePresence>
         <CardContent className='flex flex-col items-center justify-center gap-y-6 w-full'>
-          <ImageCanvas src={imageSrc} correct={correct} tries={tries} />
+          <ImageCanvas
+            src={imageSrc}
+            correct={correct}
+            tries={tries}
+            viewport={viewport}
+          />
           <AnimatePresence>
             {!correct ? (
               <motion.div

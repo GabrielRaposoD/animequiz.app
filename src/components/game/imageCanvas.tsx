@@ -11,6 +11,7 @@ type ImageCanvasProps = {
   correct: boolean;
   canvasWidth?: number;
   canvasHeight?: number;
+  viewport: 'mobile' | 'desktop';
 };
 
 const ImageCanvas = ({
@@ -19,6 +20,7 @@ const ImageCanvas = ({
   correct = false,
   canvasHeight = 350,
   canvasWidth = 225,
+  viewport,
 }: ImageCanvasProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const canvasContext = useRef<CanvasRenderingContext2D | null>(null);
@@ -59,9 +61,12 @@ const ImageCanvas = ({
     <>
       <canvas
         ref={canvasRef}
-        className={cn('rounded-md hidden', loaded ? 'block' : 'hidden')}
+        className={cn(
+          'rounded-md hidden print:hidden',
+          loaded ? 'block' : 'hidden'
+        )}
         style={
-          typeof window !== 'undefined' && window.innerWidth <= 600
+          viewport === 'mobile'
             ? { filter: `blur(${correct ? 0 : 25 - tries}px)` }
             : {}
         }

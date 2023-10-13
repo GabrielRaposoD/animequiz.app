@@ -17,6 +17,9 @@ const config: Config = {
       },
     },
     extend: {
+      screens: {
+        print: { raw: 'print' },
+      },
       fontFamily: {
         daniel: ['var(--font-daniel)'],
         danielbk: ['var(--font-danielbk)'],
