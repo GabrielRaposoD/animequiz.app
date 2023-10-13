@@ -6,7 +6,7 @@ import { prisma } from '@/lib';
 
 const ratelimit = new Ratelimit({
   redis: kv,
-  limiter: Ratelimit.slidingWindow(5, '10 s'),
+  limiter: Ratelimit.slidingWindow(20, '10 s'),
 });
 
 export async function GET(request: NextRequest) {
