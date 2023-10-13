@@ -24,7 +24,7 @@ type GameProps<GameType> = {
   placeholder: string;
   date: Date;
   seed: Seed;
-  viewport: 'mobile' | 'desktop';
+  viewport?: 'mobile' | 'desktop';
 };
 
 const containerAnimation = {
@@ -113,7 +113,7 @@ const Guess = <GameType extends unknown>({
             src={imageSrc}
             correct={correct}
             tries={tries}
-            viewport={viewport}
+            viewport={viewport ?? 'desktop'}
           />
           <AnimatePresence>
             {!correct ? (

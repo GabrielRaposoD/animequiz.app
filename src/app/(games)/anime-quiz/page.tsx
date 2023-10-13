@@ -12,7 +12,6 @@ export default async function AnimeQuiz({
 }) {
   const { data, seed } = await getTodaysData<Anime>('anime');
   const date = await getTimeUntilNewSeed();
-  console.log(searchParams.viewport);
 
   return (
     <section className='flex flex-col items-center'>
@@ -25,7 +24,7 @@ export default async function AnimeQuiz({
         placeholder='Which anime is this?'
         date={date}
         seed={seed}
-        viewport={searchParams.viewport}
+        viewport={searchParams?.viewport ?? 'desktop'}
       />
     </section>
   );
