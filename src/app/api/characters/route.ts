@@ -36,7 +36,7 @@ export async function GET(request: NextRequest) {
       OR: [
         {
           name: {
-            contains: query || '',
+            startsWith: query || '',
             mode: 'insensitive',
           },
         },
