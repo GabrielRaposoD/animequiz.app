@@ -42,7 +42,7 @@ const ImageCanvas = ({
       const image = new Image();
       image.src = src;
 
-      canvasContext.current!.filter = `blur(${correct ? 0 : 25 - tries}px)`;
+      canvasContext.current!.filter = `blur(${correct ? 0 : 25 - tries * 3}px)`;
 
       image.onload = () => {
         setLoaded(true);
