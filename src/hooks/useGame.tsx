@@ -30,11 +30,7 @@ function useGame<T>(item: T, entity: string, property: string, seed: any) {
   }, [items, property, entity]);
 
   const getItems = async (query = '') => {
-    const body: any = {};
-    body[property] = query;
-    const response = await api(`/${entity}`, {
-      body: JSON.stringify(body),
-    });
+    const response = await api(`${entity}?${property}=${query}`);
     const data = await response.json();
 
     setItems(data);
