@@ -1,13 +1,3 @@
-import { Prisma } from '@prisma/client';
-
-const characterWithAnimes = Prisma.validator<Prisma.CharacterDefaultArgs>()({
-  include: { animes: true },
-});
-
-type CharacterWithAnimes = Prisma.CharacterGetPayload<
-  typeof characterWithAnimes
->;
-
 /**
  * @name Time
  * @description Time as minutes and seconds.
@@ -37,4 +27,4 @@ type Countdown = {
   reset: (time?: Time) => void;
 };
 
-export type { CharacterWithAnimes, Countdown, Time };
+export type { Countdown, Time };
