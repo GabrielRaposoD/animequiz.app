@@ -5,7 +5,6 @@ import { Card, CardContent, CardTitle } from '../ui/card';
 
 import { Combobox } from '../ui/combobox';
 import ImageCanvas from './imageCanvas';
-import { Seed } from '@prisma/client';
 import TipCard from './tipCard';
 import cs from 'clsx';
 import { get } from 'radash';
@@ -23,7 +22,7 @@ type GameProps<GameType> = {
   tips: any[];
   placeholder: string;
   date: Date;
-  seed: Seed;
+  seed: any;
   viewport?: 'mobile' | 'desktop';
 };
 

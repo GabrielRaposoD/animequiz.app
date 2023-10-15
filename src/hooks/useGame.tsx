@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
 
-import { Seed } from '@prisma/client';
 import { api } from '@/lib';
 import { get } from 'radash';
 import { usePathname } from 'next/navigation';
@@ -11,7 +10,7 @@ const pathGame: { [key: string]: string } = {
   '/anime-quiz': 'anime',
 };
 
-function useGame<T>(item: T, entity: string, property: string, seed: Seed) {
+function useGame<T>(item: T, entity: string, property: string, seed: any) {
   const [correct, setCorrect] = useState<boolean>(false);
   const [tries, setTries] = useState<number>(0);
   const [selectedItems, setSelectedItems] = useState<T[]>([]);
