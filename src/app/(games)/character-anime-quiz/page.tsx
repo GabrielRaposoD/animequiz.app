@@ -1,27 +1,39 @@
-import { getTimeUntilNewSeed, getTodaysData } from '@/services';
-
-import { CharacterWithAnimes } from '@/types';
 import Guess from '@/components/game/guess';
 import { animeQuizTips } from '@/constants/tips';
+import { api } from '@/lib';
+import { decryptData } from '@/lib/decryptData';
 
-export default async function CharacterAnimeQuiz() {
-  const { data, seed } = await getTodaysData<CharacterWithAnimes>(
-    'character',
-    2
-  );
-  const date = await getTimeUntilNewSeed();
+export default async function CharacterAnimeQuiz({
+  searchParams,
+}: {
+  searchParams: { viewport: 'mobile' | 'desktop' };
+}) {
+  const res = await api('game/character-anime', {
+    next: {
+      revalidate: 600,
+    },
+  })
+    .then((res) => res.json())
+    .then(async (res) => await decryptData(res.data));
+
+  const date = await api('game/time', {
+    next: {
+      revalidate: 600,
+    },
+  }).then((res) => res.json());
 
   return (
     <section className='flex flex-col items-center'>
       <Guess
-        data={data.animes[0]}
+        data={res.data.animes[0]}
         entity='animes'
         property='title'
-        imageSrc={data.image}
+        imageSrc={res.data.image}
         tips={animeQuizTips}
         placeholder='Which anime is this character from?'
-        date={date}
-        seed={seed}
+        date={new Date(date)}
+        seed={res.seed}
+        viewport={searchParams?.viewport ?? 'desktop'}
       />
     </section>
   );

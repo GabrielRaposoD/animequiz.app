@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 
 import { Seed } from '@prisma/client';
+import { api } from '@/lib';
 import { get } from 'radash';
 import { usePathname } from 'next/navigation';
 
@@ -30,7 +31,11 @@ function useGame<T>(item: T, entity: string, property: string, seed: Seed) {
   }, [items, property, entity]);
 
   const getItems = async (query = '') => {
-    const response = await fetch(`/api/${entity}?${property}=${query}`);
+    const body: any = {};
+    body[property] = query;
+    const response = await api(`/${entity}`, {
+      body: JSON.stringify(body),
+    });
     const data = await response.json();
 
     setItems(data);
@@ -96,7 +101,7 @@ function useGame<T>(item: T, entity: string, property: string, seed: Seed) {
     setTries((prev) => prev + 1);
 
     if (isCorrect) {
-      await fetch('/api/game/success', {
+      await api('game/success', {
         method: 'POST',
         body: JSON.stringify({
           seedId: seed.id,
