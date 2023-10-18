@@ -1,6 +1,7 @@
 import './globals.css';
 
 import { Analytics } from '@vercel/analytics/react';
+import Link from 'next/link';
 import LocalFont from 'next/font/local';
 import type { Metadata } from 'next';
 import Nav from '@/components/ui/nav';
@@ -90,6 +91,15 @@ export default function RootLayout({
               staticity={100}
             />
             {children}
+            <footer className='items-center text-center text-xs -mb-8 text-zinc-400'>
+              <p>Anime Quiz - {new Date().getFullYear()}</p>
+              <Link
+                href={'https://github.com/GabrielRaposoD'}
+                target='_pointblank'
+              >
+                <p>Author: Gabriel Raposo</p>
+              </Link>
+            </footer>
           </main>
         </ThemeProvider>
         <Analytics />

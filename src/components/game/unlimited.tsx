@@ -129,7 +129,7 @@ const Unlimited = ({ type, viewport }: UnlimitedProps) => {
         canvasWidth={322}
         canvasHeight={455}
       />
-      <div className='grid grid-cols-2 grid-flow-row gap-x-4 gap-y-3 w-full mt-16'>
+      <div className='grid lg:grid-cols-2 grid-cols-1 grid-flow-row gap-x-4 gap-y-3 w-full mt-16'>
         {loading ? (
           <>
             <Skeleton className='py-5 w-full' />
@@ -140,7 +140,7 @@ const Unlimited = ({ type, viewport }: UnlimitedProps) => {
         ) : (
           current.map((item) => (
             <Button
-              key={item.apiId}
+              key={item.apiId + window.crypto.randomUUID()}
               className={cs('flex flex-col py-5 transition-all duration-500', {
                 'bg-green-600 disabled:opacity-100 border-green-500 shadow-md shadow-green-500/50':
                   disabled && item.apiId === correct.apiId,
