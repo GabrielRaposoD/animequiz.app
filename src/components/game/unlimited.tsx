@@ -140,7 +140,7 @@ const Unlimited = ({ type, viewport }: UnlimitedProps) => {
         ) : (
           current.map((item) => (
             <Button
-              key={item.apiId}
+              key={item.apiId + window.crypto.randomUUID()}
               className={cs('flex flex-col py-5 transition-all duration-500', {
                 'bg-green-600 disabled:opacity-100 border-green-500 shadow-md shadow-green-500/50':
                   disabled && item.apiId === correct.apiId,
