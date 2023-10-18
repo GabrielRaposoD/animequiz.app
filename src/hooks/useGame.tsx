@@ -109,7 +109,6 @@ function useGame<T>(item: T, entity: string, property: string, seed: any) {
 
   const onItemValueChange = (value: string, type: 'select' | 'input') => {
     if (type === 'select') {
-      console.log(value);
       onItemSelect(value);
     } else {
       getItems(value);

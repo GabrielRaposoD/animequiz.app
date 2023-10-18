@@ -7,8 +7,8 @@ import { cn } from '@/lib/utils';
 
 type ImageCanvasProps = {
   src: string;
-  tries: number;
-  correct: boolean;
+  tries?: number;
+  correct?: boolean;
   canvasWidth?: number;
   canvasHeight?: number;
   viewport: 'mobile' | 'desktop';
@@ -17,7 +17,7 @@ type ImageCanvasProps = {
 const ImageCanvas = ({
   src,
   tries = 0,
-  correct = false,
+  correct = true,
   canvasHeight = 350,
   canvasWidth = 225,
   viewport,

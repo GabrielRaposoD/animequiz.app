@@ -1,4 +1,4 @@
-import Guess from '@/components/game/guess';
+import Guess from '@/components/game/game';
 import { api } from '@/lib';
 import { characterQuizTips } from '@/constants/tips';
 import { decryptData } from '@/lib/decryptData';
@@ -14,7 +14,7 @@ export default async function CharacterQuiz({
     },
   })
     .then((res) => res.json())
-    .then(async (res) => await decryptData(res.data));
+    .then(async (res) => await decryptData(res));
 
   const date = await api('game/time', {
     next: {

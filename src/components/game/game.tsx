@@ -151,11 +151,11 @@ const Guess = <GameType extends unknown>({
                 <p>Next game in</p>
                 <div className='flex flex-row -mt-1.5 gap-x-0.5'>
                   {[
-                    hours.toString(),
+                    hours.toString().padStart(2, '0'),
                     ':',
-                    minutes.toString(),
+                    minutes.toString().padStart(2, '0'),
                     ':',
-                    seconds.toString(),
+                    seconds.toString().padStart(2, '0'),
                   ]
                     .join('')
                     .split('')
