@@ -129,7 +129,7 @@ const Unlimited = ({ type, viewport }: UnlimitedProps) => {
         canvasWidth={322}
         canvasHeight={455}
       />
-      <div className='grid grid-cols-2 grid-flow-row gap-x-4 gap-y-3 w-full mt-16'>
+      <div className='grid lg:grid-cols-2 grid-cols-1 grid-flow-row gap-x-4 gap-y-3 w-full mt-16'>
         {loading ? (
           <>
             <Skeleton className='py-5 w-full' />
