@@ -31,6 +31,16 @@ const nav = [
     href: 'anime-quiz',
     description: "Guess today's anime",
   },
+  {
+    label: 'Unlimited Characters',
+    href: 'unlimited-characters',
+    description: "Guess until you can't guess anymore",
+  },
+  {
+    label: 'Unlimited Animes',
+    href: 'unlimited-animes',
+    description: "Guess until you can't guess anymore",
+  },
 ];
 
 export default async function Home() {
