@@ -91,7 +91,7 @@ export default function RootLayout({
               staticity={100}
             />
             {children}
-            <footer className='items-center text-center text-xs -mb-8 text-zinc-400'>
+            <footer className='items-center text-center text-xs mb-4 text-zinc-400 absolute bottom-0'>
               <p>Anime Quiz - {new Date().getFullYear()}</p>
               <Link
                 href={'https://github.com/GabrielRaposoD'}
