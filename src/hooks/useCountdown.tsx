@@ -6,7 +6,7 @@ import {
   calculateRemainingSeconds,
 } from '@/lib/time';
 import { format as formatTime, toDate } from 'date-fns';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 type useCountdownParams = {
   hours?: number;
@@ -60,7 +60,7 @@ const useCountdown = ({
     []
   );
 
-  const calculateRemainingTime = () => {
+  const calculateRemainingTime = useCallback(() => {
     setRemainingTime((time) => {
       if (time - 1000 <= 0) {
         window.clearInterval(id.current);
@@ -76,7 +76,7 @@ const useCountdown = ({
 
       return time - 1000;
     });
-  };
+  }, [onCompleted]);
 
   const pause = (): void => {
     if (isPaused || isInactive) {

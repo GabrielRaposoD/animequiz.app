@@ -3,8 +3,6 @@ import { useCallback, useEffect, useState } from 'react';
 
 import { decryptData } from '@/lib/decryptData';
 import { objectToSearchString } from 'serialize-query-params';
-import { sleep } from 'radash';
-import useCountdown from './useCountdown';
 
 type Option = {
   apiId: string;
@@ -37,12 +35,12 @@ function useUnlimited(type: 'character' | 'anime') {
   const [lost, setLost] = useState<boolean>(false);
   const [timedOut, setTimedOut] = useState<boolean>(false);
   const [totalTime, setTotalTime] = useState<number>(0);
+  const [paused, setPaused] = useState<boolean>(true);
 
   const onSelect = async (option: Option) => {
-    pause();
+    setPaused(true);
     setSelected(option);
     setDisabled(true);
-    setTotalTime((prev) => prev + UNLIMITED_TIME - seconds);
 
     if (option?.apiId === correct?.apiId) {
       setScore((prev) => prev + 1);
@@ -63,21 +61,13 @@ function useUnlimited(type: 'character' | 'anime') {
     }
 
     const nextCopy = next;
-    await getNext();
+    const data = await getNext();
 
-    await sleep(1000);
+    setNext(data);
 
     setCurrent(nextCopy);
+    setPaused(false);
   };
-
-  const { seconds, pause, reset } = useCountdown({
-    seconds: UNLIMITED_TIME,
-    autoStart: true,
-    format: 'hh:mm:ss',
-    onCompleted: () => {
-      setTimedOut(true);
-    },
-  });
 
   const getData = async () => {
     const query = objectToSearchString({
@@ -99,7 +89,7 @@ function useUnlimited(type: 'character' | 'anime') {
 
     setBlacklist((prev) => [...prev, res.correct.apiId]);
 
-    setNext(res);
+    return res;
   };
 
   const parseData = useCallback(
@@ -134,7 +124,6 @@ function useUnlimited(type: 'character' | 'anime') {
     _setCurrent(shuffleArray(options));
     setSelected(null);
     setDisabled(false);
-    reset();
   };
 
   const init = async () => {
@@ -150,9 +139,11 @@ function useUnlimited(type: 'character' | 'anime') {
     const curr = await getData();
     setBlacklist(() => [curr.correct.apiId, '']);
 
-    await getNext();
+    const data = await getNext();
+    setNext(data);
     setLoading(false);
     setCurrent(curr);
+    setPaused(false);
   };
 
   useEffect(() => {
@@ -167,7 +158,6 @@ function useUnlimited(type: 'character' | 'anime') {
       setTimedOut(false);
       onSelect({ apiId: 'timedOut', name: '', image: '' });
     }
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [timedOut]);
 
@@ -180,10 +170,12 @@ function useUnlimited(type: 'character' | 'anime') {
     current,
     correct,
     lives,
-    seconds,
     selected,
     init,
     totalTime,
+    setTotalTime,
+    paused,
+    setTimedOut,
   };
 }
 
