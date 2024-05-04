@@ -13,6 +13,7 @@ type Time = {
  * @description State of the countdown timer.
  */
 type Countdown = {
+  remainingTime: number;
   hours: number;
   minutes: number;
   seconds: number;

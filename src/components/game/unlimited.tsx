@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import ImageCanvas from '@/components/game/imageCanvas';
 import { Separator } from '../ui/separator';
 import { Skeleton } from '../ui/skeleton';
+import UnlimitedCountdown from './unlimitedCountdown';
 import cs from 'clsx';
 import useUnlimited from '@/hooks/useUnlimited';
 
@@ -33,7 +34,6 @@ const StatsListItem = ({
 const Unlimited = ({ type, viewport }: UnlimitedProps) => {
   const {
     score,
-    seconds,
     selected,
     correct,
     current,
@@ -44,6 +44,9 @@ const Unlimited = ({ type, viewport }: UnlimitedProps) => {
     onSelect,
     init,
     totalTime,
+    paused,
+    setTimedOut,
+    setTotalTime,
   } = useUnlimited(type);
 
   if (lost) {
@@ -120,7 +123,11 @@ const Unlimited = ({ type, viewport }: UnlimitedProps) => {
               return <Heart className='text-pink-700 fill-current' key={i} />;
             })}
           </div>
-          <p>{loading ? '00' : seconds.toString().padStart(2, '0')}</p>
+          <UnlimitedCountdown
+            paused={paused}
+            setTimedOut={setTimedOut}
+            setTotalTime={setTotalTime}
+          />
         </div>
       </div>
       <ImageCanvas

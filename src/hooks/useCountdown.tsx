@@ -6,7 +6,7 @@ import {
   calculateRemainingSeconds,
 } from '@/lib/time';
 import { format as formatTime, toDate } from 'date-fns';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 type useCountdownParams = {
   hours?: number;
@@ -14,7 +14,6 @@ type useCountdownParams = {
   seconds?: number;
   format?: string;
   autoStart?: boolean;
-  onCompleted?: VoidFunction;
 };
 
 /**
@@ -27,7 +26,6 @@ const useCountdown = ({
   seconds = 0,
   format = 'hh:mm:ss',
   autoStart = false,
-  onCompleted,
 }: useCountdownParams = {}): Countdown => {
   const id = useRef(0);
 
@@ -60,11 +58,10 @@ const useCountdown = ({
     []
   );
 
-  const calculateRemainingTime = () => {
+  const calculateRemainingTime = useCallback(() => {
     setRemainingTime((time) => {
       if (time - 1000 <= 0) {
         window.clearInterval(id.current);
-        onCompleted?.();
 
         setIsActive(false);
         setIsInactive(true);
@@ -76,7 +73,7 @@ const useCountdown = ({
 
       return time - 1000;
     });
-  };
+  }, []);
 
   const pause = (): void => {
     if (isPaused || isInactive) {
@@ -125,6 +122,7 @@ const useCountdown = ({
   };
 
   const countdown: Countdown = {
+    remainingTime,
     hours: calculateRemainingHours(remainingTime),
     minutes: calculateRemainingMinutes(remainingTime),
     seconds: calculateRemainingSeconds(remainingTime),

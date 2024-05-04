@@ -5,14 +5,12 @@ import { Card, CardContent, CardTitle } from '../ui/card';
 
 import { Combobox } from '../ui/combobox';
 import ImageCanvas from './imageCanvas';
+import Success from './success';
 import TipCard from './tipCard';
 import cs from 'clsx';
 import { get } from 'radash';
-import { intervalToDuration } from 'date-fns';
 import tipParser from '@/lib/tipParser';
-import useCountdown from '@/hooks/useCountdown';
 import useGame from '@/hooks/useGame';
-import { useRouter } from 'next/navigation';
 
 type GameProps<GameType> = {
   data: GameType;
@@ -59,22 +57,6 @@ const Guess = <GameType extends unknown>({
 }: GameProps<GameType>) => {
   const { correct, onItemValueChange, parsedItems, selectedItems, tries } =
     useGame<GameType>(data, entity, property, seed);
-
-  const router = useRouter();
-
-  let duration = intervalToDuration({
-    start: new Date(),
-    end: date,
-  });
-
-  const { hours, minutes, seconds } = useCountdown({
-    hours: duration.hours || 0 + (duration.days || 0) * 24,
-    minutes: duration.minutes,
-    seconds: duration.seconds,
-    autoStart: true,
-    format: 'hh:mm:ss',
-    onCompleted: () => router.refresh(),
-  });
 
   return (
     <div className='flex flex-col items-center gap-y-12 mt-16'>
@@ -134,50 +116,12 @@ const Guess = <GameType extends unknown>({
                 />
               </motion.div>
             ) : (
-              <motion.div
-                key='success'
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 1 }}
-                exit={{ opacity: 0 }}
-                className='mt-2 flex flex-col items-center justify-center gap-y-2 w-full font-medium text-center text-lg'
-              >
-                <p>You guessed</p>
-                <p className=' -mt-1.5 font-daniel'>
-                  {get<string>(data, property)}
-                </p>
-                <p>Number of tries</p>
-                <p className='-mt-1.5 font-daniel'>{tries}</p>
-                <p>Next game in</p>
-                <div className='flex flex-row -mt-1.5 gap-x-0.5'>
-                  {[
-                    hours.toString().padStart(2, '0'),
-                    ':',
-                    minutes.toString().padStart(2, '0'),
-                    ':',
-                    seconds.toString().padStart(2, '0'),
-                  ]
-                    .join('')
-                    .split('')
-                    .map((char, index) => {
-                      return (
-                        <motion.p
-                          key={char + index}
-                          initial={{ y: -20, opacity: 0 }}
-                          animate={{ y: 0, opacity: 1 }}
-                          exit={{ y: 80, opacity: 0, position: 'absolute' }}
-                          transition={{
-                            ease: 'easeOut',
-                            duration: 1,
-                          }}
-                          className='font-daniel relative'
-                        >
-                          {char}
-                        </motion.p>
-                      );
-                    })}
-                </div>
-              </motion.div>
+              <Success
+                data={data}
+                property={property}
+                date={date}
+                tries={tries}
+              />
             )}
           </AnimatePresence>
         </CardContent>
