@@ -28,10 +28,7 @@ const Success = ({ data, date, property, tries }: SuccessProps) => {
     format: 'hh:mm:ss',
   });
 
-  console.log(remainingTime);
-
   useEffect(() => {
-    console.log(remainingTime, '1');
     if (remainingTime === 0) {
       router.push('/');
     }
