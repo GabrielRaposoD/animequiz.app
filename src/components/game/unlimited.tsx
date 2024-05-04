@@ -5,10 +5,10 @@ import { Heart, HeartCrack } from 'lucide-react';
 import { formatDuration, intervalToDuration } from 'date-fns';
 
 import { Button } from '@/components/ui/button';
-import Countdown from './countdown';
 import ImageCanvas from '@/components/game/imageCanvas';
 import { Separator } from '../ui/separator';
 import { Skeleton } from '../ui/skeleton';
+import UnlimitedCountdown from './unlimitedCountdown';
 import cs from 'clsx';
 import useUnlimited from '@/hooks/useUnlimited';
 
@@ -123,7 +123,7 @@ const Unlimited = ({ type, viewport }: UnlimitedProps) => {
               return <Heart className='text-pink-700 fill-current' key={i} />;
             })}
           </div>
-          <Countdown
+          <UnlimitedCountdown
             paused={paused}
             setTimedOut={setTimedOut}
             setTotalTime={setTotalTime}

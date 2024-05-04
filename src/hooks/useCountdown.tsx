@@ -122,6 +122,7 @@ const useCountdown = ({
   };
 
   const countdown: Countdown = {
+    remainingTime,
     hours: calculateRemainingHours(remainingTime),
     minutes: calculateRemainingMinutes(remainingTime),
     seconds: calculateRemainingSeconds(remainingTime),

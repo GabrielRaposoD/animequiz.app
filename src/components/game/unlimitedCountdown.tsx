@@ -8,7 +8,11 @@ type CountdownProps = {
   setTotalTime: Dispatch<SetStateAction<number>>;
 };
 
-const Countdown = ({ paused, setTimedOut, setTotalTime }: CountdownProps) => {
+const UnlimitedCountdown = ({
+  paused,
+  setTimedOut,
+  setTotalTime,
+}: CountdownProps) => {
   const UNLIMITED_TIME = 30;
 
   const { seconds, pause, reset, start } = useCountdown({
@@ -38,4 +42,4 @@ const Countdown = ({ paused, setTimedOut, setTotalTime }: CountdownProps) => {
   return <p>{seconds.toString().padStart(2, '0')}</p>;
 };
 
-export default Countdown;
+export default UnlimitedCountdown;
