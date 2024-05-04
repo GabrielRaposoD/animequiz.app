@@ -16,8 +16,6 @@ type Live = {
   lostOn?: Option;
 };
 
-const UNLIMITED_TIME = 30;
-
 function useUnlimited(type: 'character' | 'anime') {
   const [score, setScore] = useState<number>(0);
   const [next, setNext] = useState(null);

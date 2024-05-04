@@ -2,8 +2,6 @@ import { Dispatch, SetStateAction, useEffect } from 'react';
 
 import useCountdown from '@/hooks/useCountdown';
 
-const UNLIMITED_TIME = 30;
-
 type CountdownProps = {
   paused: boolean;
   setTimedOut: Dispatch<SetStateAction<boolean>>;
@@ -11,14 +9,20 @@ type CountdownProps = {
 };
 
 const Countdown = ({ paused, setTimedOut, setTotalTime }: CountdownProps) => {
+  const UNLIMITED_TIME = 30;
+
   const { seconds, pause, reset, start } = useCountdown({
     seconds: UNLIMITED_TIME,
     autoStart: false,
     format: 'hh:mm:ss',
-    onCompleted: () => {
-      setTimedOut(true);
-    },
   });
+
+  useEffect(() => {
+    if (seconds === 0) {
+      setTimedOut(true);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [seconds]);
 
   useEffect(() => {
     if (paused) {

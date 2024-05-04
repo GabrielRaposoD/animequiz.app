@@ -14,7 +14,6 @@ type useCountdownParams = {
   seconds?: number;
   format?: string;
   autoStart?: boolean;
-  onCompleted?: VoidFunction;
 };
 
 /**
@@ -27,7 +26,6 @@ const useCountdown = ({
   seconds = 0,
   format = 'hh:mm:ss',
   autoStart = false,
-  onCompleted,
 }: useCountdownParams = {}): Countdown => {
   const id = useRef(0);
 
@@ -64,7 +62,6 @@ const useCountdown = ({
     setRemainingTime((time) => {
       if (time - 1000 <= 0) {
         window.clearInterval(id.current);
-        onCompleted?.();
 
         setIsActive(false);
         setIsInactive(true);
@@ -76,7 +73,7 @@ const useCountdown = ({
 
       return time - 1000;
     });
-  }, [onCompleted]);
+  }, []);
 
   const pause = (): void => {
     if (isPaused || isInactive) {

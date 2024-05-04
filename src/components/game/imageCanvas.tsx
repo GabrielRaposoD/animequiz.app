@@ -27,6 +27,8 @@ const ImageCanvas = ({
   const [loaded, setLoaded] = useState<boolean>(false);
 
   useEffect(() => {
+    if (!src) return;
+
     if (typeof window !== 'undefined' && canvasRef.current) {
       if (!canvasContext.current) {
         canvasContext.current = canvasRef.current.getContext('2d');
